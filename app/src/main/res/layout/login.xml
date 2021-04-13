@@ -6,12 +6,19 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/Univname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="성신여자대학교\nUnivPlanner"
-        android:textSize="30dp"
+        android:text="성신여자대학교"
+        android:textSize="19dp"
         android:layout_marginTop="100dp"
+        android:textColor="#000000" />
+    <TextView
+        android:id="@+id/appname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UnivPlanner"
+        android:textSize="35dp"
         android:layout_marginBottom="40dp"
         android:textColor="#000000"/>
     <EditText
@@ -38,6 +45,7 @@
         android:layout_gravity="center"
         android:text="로그인"
         android:textSize="15dp"
+        android:backgroundTint="@color/purple_200"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -70,7 +78,7 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="260dp"
+            android:layout_width="228dp"
             android:layout_height="wrap_content"
             android:textSize="13dp"
             android:layout_gravity="center"
