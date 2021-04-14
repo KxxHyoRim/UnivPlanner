@@ -31,5 +31,6 @@
         <activity android:name=".login"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".SignUpSuccessActivity"/>
+        <activity android:name=".SignUpActivity"/>
     </application>
 </manifest>
