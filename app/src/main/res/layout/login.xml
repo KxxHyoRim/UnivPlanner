@@ -48,6 +48,15 @@
         android:backgroundTint="@color/purple_200"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:text="회원가입" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="89dp"
@@ -84,5 +93,7 @@
             android:layout_gravity="center"
             android:text="아이디저장 및 자동 로그인은 공개된 장소의 단말기에서는 사용을 권하지 않습니다." />
     </LinearLayout>
+
+
 
 </LinearLayout>
