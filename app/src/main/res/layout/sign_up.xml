@@ -31,6 +31,7 @@
         android:layout_marginBottom="35dp"
         android:entries="@array/school_list"
         android:spinnerMode="dropdown"/>
+    <!-- 필요하면 넣자ㅎ.ㅎ
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
@@ -39,6 +40,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
         android:hint="이름을 입력하세요."/>
+        -->
 
     <EditText
         android:id="@+id/id"
