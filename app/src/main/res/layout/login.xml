@@ -36,6 +36,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
+        android:inputType="textPassword"
         android:hint="패스워드를 입력하세요."/>
 
     <Button
