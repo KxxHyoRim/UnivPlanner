@@ -32,5 +32,8 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".SignUpSuccessActivity"/>
         <activity android:name=".SignUpActivity"/>
+        <activity android:name=".SettingActivity"/>
+        <activity android:name=".ProfileActivity"/>
+        <activity android:name=".PasswordChangeActivity"/>
     </application>
 </manifest>
