@@ -12,15 +12,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +41,21 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fm;
     private ArrayList<Fragment> fList;
 
+    /*---------- 효림 -------*/
+    TextView MainCenterText;
+    final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36";
+    private String loginUrl = "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl";
+    private String htmlPageUrl = "https://lms.sungshin.ac.kr/ilos/main/main_form.acl";
+    private String registerListUrl = "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl";
+
+    private String user_id = "20191012";
+    private String user_pw = "";            //push 할떄만 비밀번호 가려서 올릴게~~~~ (효림)
+
+    private String htmlContentInStringFormat = "";
+
+    /******************************************/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main);
+
+
+        MainCenterText = (TextView) findViewById(R.id.MainCenterText);
+        MainCenterText.setMovementMethod(new ScrollingMovementMethod());
+
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
+        jsoupAsyncTask.execute();
+
 
         // 스와이프할 뷰페이저를 정의
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -118,4 +151,98 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
+
+
+    /**크롤링 하는 코드 : 효림 */
+
+    private class JsoupAsyncTask extends AsyncTask<Void, Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try{
+
+                Connection.Response initial = Jsoup.connect(loginUrl)
+//                        .header("Accept", "*/*")
+//                        .header("Referer", "https://lms.sungshin.ac.kr/ilos/main/main_form.acl")
+//                        .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
+//                        .header("Accept-Encoding", "gzip, deflate, br")
+//                        .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+//                        .header("sec-ch-ua", "\"Google Chrome\";v=\"90\", \"Not;A Brand\";v=\"99\",\"Chromium\";v=\"90\"")
+//                        .header("sec-ch-ua-mobile", "?1")
+//                        .header("Sec-Fetch-Dest","document")
+//                        .header("Sec-Fetch-Mode", "navigate")
+//                        .header("Sec-Fetch-Site", "same-origin")
+                        .method(Connection.Method.GET)
+                        .execute();
+
+                Map<String, String> initialCookie = initial.cookies();
+
+                Document loginDocument = initial.parse();
+                String returnURL = loginDocument.select("input.returnURL").val();
+                String challenge = loginDocument.select("input.challenge").val();
+                String response = loginDocument.select("input.response").val();
+                String RelayState = loginDocument.select("input.RelayState").val();
+
+                Connection.Response login = Jsoup.connect(loginUrl)
+                        .userAgent(USER_AGENT)
+                        .header("Accept", "*/*")
+                        .header("Accept-Encoding", "gzip, deflate, br")
+                        .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+                        .header("Connection", "keep-alive")
+                        .header("Host", "lms.sungshin.ac.kr")
+                        .header("Referer", "https://lms.sungshin.ac.kr/ilos/main/main_form.acl")
+//                        .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
+                        .header("sec-ch-ua", "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"")
+                        .header("sec-ch-ua-mobile", "?0")
+                        .header("Sec-Fetch-Dest","empty")
+                        .header("Sec-Fetch-Mode", "cors")
+                        .header("Sec-Fetch-Site", "same-origin")
+                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
+                        .header("X-Requested-With","XMLHttpRequest")
+                        .cookies(initialCookie)
+//                        .data("login_div", "sso")
+                        .data("loginId", user_id)
+                        .data("loginPwd", user_pw)
+//                        .data("returnURL", returnURL)
+//                        .data("target", "")
+                        .method(Connection.Method.POST)
+                        .execute();
+
+
+
+                Map<String, String> coky = login.cookies();
+
+                Document doc = Jsoup.connect(htmlPageUrl)
+                        .cookies(coky)
+                        .get();
+
+
+                Elements contents = doc.select("div.m-box2 li");
+                for (Element content : contents){
+                    System.out.println("check" + content.text());
+                    if (content.text().substring(0,3).equals("null")) {
+                        String temp = content.text().substring(4);
+                        htmlContentInStringFormat += (temp + "\n");
+                        continue;
+                    }
+                    htmlContentInStringFormat += (content.text().trim() + "\n");
+                }
+
+
+
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            MainCenterText.setText(htmlContentInStringFormat);
+        }
+    }
+
 }
