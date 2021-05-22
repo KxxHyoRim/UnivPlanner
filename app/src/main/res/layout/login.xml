@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/checkBox3"
+            android:id="@+id/login_checkbox_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -67,7 +67,7 @@
             android:textSize="13dp" />
 
         <CheckBox
-            android:id="@+id/checkBox4"
+            android:id="@+id/login_checkbox_pw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="자동로그인"
