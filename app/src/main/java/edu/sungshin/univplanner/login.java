@@ -75,7 +75,7 @@ public class login extends AppCompatActivity {
             }
 
             catch (Exception e) {
-                Log.e("sck", "fail");
+                Log.e("sck", "socket fail");
                 e.printStackTrace();
             }
         }
