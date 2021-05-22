@@ -26,13 +26,6 @@ public class login extends AppCompatActivity {
             }
         });
 
-        signup = (TextView) findViewById(R.id.signup);
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+
     }
 }
