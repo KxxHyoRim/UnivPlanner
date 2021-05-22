@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
     Button b;
     Toolbar toolbar;
 
-    private ViewPager mViewPager;
-    private FragmentManager fm;
+    ViewPager mViewPager;
     private ArrayList<Fragment> fList;
 
     /*---------- 효림 -------*/
@@ -76,16 +75,19 @@ public class MainActivity extends AppCompatActivity {
         // 스와이프할 뷰페이저를 정의
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
-        // 프라그먼트 매니져 객체 정의
-        fm = getSupportFragmentManager();
+        //페이지 갯수지정
+        mViewPager.setOffscreenPageLimit(2);
+
+        //어댑터 객체 생성
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
         // 각 탭에 들어갈 프라그먼트 생성 및 추가
-        fList = new ArrayList<Fragment>();
-        fList.add(Fragment_lecture.newInstance());
-        fList.add(Fragment_assignment.newInstance());
+        fragment_lecture fragment1 = new fragment_lecture();
+        adapter.addItem(fragment1);
+        fragment_assignment fragment2 = new fragment_assignment();
+        adapter.addItem(fragment2);
 
-//        // 스와이프로 탭간 이동할 뷰페이저의 리스너 설정
-//        mViewPager.setOnPageChangeListener(viewPagerListener);
+        mViewPager.setAdapter(adapter);
 
         //toolBar를 통해 App Bar 생성
         Toolbar toolbar = findViewById(R.id.toolbar);

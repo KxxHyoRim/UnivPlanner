@@ -39,17 +39,31 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="300dp"
             android:id="@+id/MainCenterText"
             android:layout_below="@+id/view_toolbar"/>
 
+        <View
+            android:id="@+id/block"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/MainCenterText"/>
 
         <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
-            android:layout_height="330dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/block"
             android:id="@+id/viewPager"
-            android:layout_below="@id/MainCenterText">
-
+            >
+            <androidx.viewpager.widget.PagerTitleStrip
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/purple_200"
+                android:textColor="#000000"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
         </androidx.viewpager.widget.ViewPager>
 
     </RelativeLayout>
