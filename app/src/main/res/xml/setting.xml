@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="설정">
-        <PreferenceScreen
-            android:title="프로필">
-            <intent android:targetPackage="edu.sungshin.univplanner"
-                android:targetClass="edu.sungshin.univplanner.ProfileActivity"/>
-        </PreferenceScreen>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <PreferenceScreen
             android:title="비밀번호 변경">
@@ -47,5 +42,5 @@
         <PreferenceScreen
             android:title="문의하기">
         </PreferenceScreen>
-    </PreferenceCategory>
+
 </PreferenceScreen>
