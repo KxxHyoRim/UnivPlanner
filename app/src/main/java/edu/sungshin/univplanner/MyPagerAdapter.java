@@ -4,27 +4,42 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<Fragment> frags;
+public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-    public MyPagerAdapter(@NonNull FragmentManager fm,  ArrayList<Fragment> fList) {
+    ArrayList<Fragment> items = new ArrayList<Fragment>();
+    public MyPagerAdapter(FragmentManager fm) {
         super(fm);
-
-        frags = new ArrayList<>();
-        this.frags = fList;
     }
-        // 해당 프라그먼트 호출 함수.
-        @Override
-        public Fragment getItem(int position) {
-            return this.frags.get(position);
-        }
 
-        @Override
-        public int getCount() {
-            return frags.size();
-        }
+    @NonNull
+    @Override
+    public Fragment getItem(int position) {
+        return items.get(position);
+    }
 
+    @Override
+    public int getCount() {
+        return items.size();
+    }
+
+    public void addItem(Fragment item) {
+        items.add(item);
+    }
+
+    @NonNull
+    @Override
+    public CharSequence getPageTitle(int position){
+        switch (position){
+            case 0:
+                return "Lecture";
+            case 1:
+                return "Assignment";
+            default:
+                return "No";
+        }
+    }
 }

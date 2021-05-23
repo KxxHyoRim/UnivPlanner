@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "900168495515",
+    "project_id": "univp-1db5d",
+    "storage_bucket": "univp-1db5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900168495515:android:ad8da725832ea733bbb13e",
+        "android_client_info": {
+          "package_name": "edu.sungshin.univplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900168495515-mrb0kk4crvj6dibp4h6v5j91iqn8qp3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYEksEb8vOlSfBhG_pIJbq0nvy2e1lKuo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900168495515-mrb0kk4crvj6dibp4h6v5j91iqn8qp3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
