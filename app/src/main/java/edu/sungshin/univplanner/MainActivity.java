@@ -25,9 +25,11 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.FormElement;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
             "(KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36";
     private String loginUrl = "https://lms.sungshin.ac.kr/ilos/main/member/login_form.acl";
+    private String actionLoginUrl = "https://lms.sungshin.ac.kr/ilos/sso/CreateRequestAuth.jsp";
     private String htmlPageUrl = "https://lms.sungshin.ac.kr/ilos/main/main_form.acl";
     private String registerListUrl = "https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl";
 
@@ -150,8 +153,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
     /**크롤링 하는 코드 : 효림 */
 
     private class JsoupAsyncTask extends AsyncTask<Void, Void,Void> {
@@ -160,75 +161,48 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             try{
 
+                // 1. Go to login page
                 Connection.Response initial = Jsoup.connect(loginUrl)
-//                        .header("Accept", "*/*")
-//                        .header("Referer", "https://lms.sungshin.ac.kr/ilos/main/main_form.acl")
-//                        .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
-//                        .header("Accept-Encoding", "gzip, deflate, br")
-//                        .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
-//                        .header("sec-ch-ua", "\"Google Chrome\";v=\"90\", \"Not;A Brand\";v=\"99\",\"Chromium\";v=\"90\"")
-//                        .header("sec-ch-ua-mobile", "?1")
-//                        .header("Sec-Fetch-Dest","document")
-//                        .header("Sec-Fetch-Mode", "navigate")
-//                        .header("Sec-Fetch-Site", "same-origin")
                         .method(Connection.Method.GET)
-                        .execute();
-
-                Map<String, String> initialCookie = initial.cookies();
-
-                Document loginDocument = initial.parse();
-                String returnURL = loginDocument.select("input.returnURL").val();
-                String challenge = loginDocument.select("input.challenge").val();
-                String response = loginDocument.select("input.response").val();
-                String RelayState = loginDocument.select("input.RelayState").val();
-
-                Connection.Response login = Jsoup.connect(loginUrl)
                         .userAgent(USER_AGENT)
-                        .header("Accept", "*/*")
-                        .header("Accept-Encoding", "gzip, deflate, br")
-                        .header("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
-                        .header("Connection", "keep-alive")
-                        .header("Host", "lms.sungshin.ac.kr")
-                        .header("Referer", "https://lms.sungshin.ac.kr/ilos/main/main_form.acl")
-//                        .header("Content-Type","application/x-www-form-urlencoded; charset=UTF-8")
-                        .header("sec-ch-ua", "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"90\", \"Google Chrome\";v=\"90\"")
-                        .header("sec-ch-ua-mobile", "?0")
-                        .header("Sec-Fetch-Dest","empty")
-                        .header("Sec-Fetch-Mode", "cors")
-                        .header("Sec-Fetch-Site", "same-origin")
-                        .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
-                        .header("X-Requested-With","XMLHttpRequest")
-                        .cookies(initialCookie)
-//                        .data("login_div", "sso")
-                        .data("loginId", user_id)
-                        .data("loginPwd", user_pw)
-//                        .data("returnURL", returnURL)
-//                        .data("target", "")
-                        .method(Connection.Method.POST)
                         .execute();
 
+                FormElement loginForm = (FormElement) initial.parse().selectFirst("#myform");
+
+                Element idField = loginForm.selectFirst("#usr_id");
+                idField.val(user_id);
+
+                Element pwField = loginForm.selectFirst("#usr_pwd");
+                pwField.val(user_pw);
+
+                System.out.println("====loginForm / after ======");
+                System.out.println(loginForm);
 
 
-                Map<String, String> coky = login.cookies();
+                Connection.Response loginActionResponse = loginForm.submit()
+                        .cookies(initial.cookies())
+//                        .data(formData)
+                        .userAgent(USER_AGENT)
+                        .execute();
 
-                Document doc = Jsoup.connect(htmlPageUrl)
-                        .cookies(coky)
-                        .get();
+                Document d = loginActionResponse.parse();
+                System.out.println("url==========");
+                System.out.println(d.location());
+                System.out.println("cookies==========");
+                System.out.println(loginActionResponse.cookies());
+
+                Document doc = Jsoup.connect("https://lms.sungshin.ac.kr/ilos/mp/course_register_list_form.acl")
+                        .cookie("JSESSIONID",loginActionResponse.cookie("JSESSIONID") )
+                        .userAgent(USER_AGENT)
+                        .post();
+
+                htmlContentInStringFormat += doc.text();
 
 
                 Elements contents = doc.select("div.m-box2 li");
                 for (Element content : contents){
-                    System.out.println("check" + content.text());
-                    if (content.text().substring(0,3).equals("null")) {
-                        String temp = content.text().substring(4);
-                        htmlContentInStringFormat += (temp + "\n");
-                        continue;
-                    }
                     htmlContentInStringFormat += (content.text().trim() + "\n");
                 }
-
-
-
 
             } catch (Exception e){
                 e.printStackTrace();
