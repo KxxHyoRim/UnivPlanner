@@ -1,5 +1,6 @@
 package edu.sungshin.univplanner;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,6 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,6 +29,7 @@ public class login extends AppCompatActivity {
     Button button;
     EditText idEditText, pwEditText;
     String idText, pwText;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +45,8 @@ public class login extends AppCompatActivity {
             public void onClick(View v) {
                 idText = idEditText.getText().toString();
                 pwText = pwEditText.getText().toString();
+                button.setText("로그인 정보 확인중");
+                button.setEnabled(false);
                 Log.e("btn", "click");
                 ClientThread thread = new ClientThread();
                 thread.start();
@@ -58,26 +71,85 @@ public class login extends AppCompatActivity {
                 Log.e("send", idText);
 
                 out.println(pwText);
-                //Log.e("send", pwText);
+                Log.e("send", pwText);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
 
                 if (rev.equals("Success")) {
                     Log.e("receive", "Success");
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
+                    firebaseSignUp();
                 }
 
                 else {
+                    button.setText("로그인");
+                    button.setEnabled(true);
+
+                    login.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(login.this,
+                                    "잘못된 로그인 정보입니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     Log.e("receive", "failed");
                 }
             }
 
             catch (Exception e) {
+                button.setText("로그인");
+                button.setEnabled(true);
+
+                login.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(login.this,
+                                "잘못된 로그인 정보입니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 Log.e("sck", "fail");
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            currentUser.reload();
+        }
+    }
+
+    private void firebaseSignUp() {
+        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    assert user != null;
+                    String userInfo = user.getUid();
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
+                    myRef.setValue(idText);
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+
+                else {
+                    // If sign in fails, display a message to the user.
+                    Log.e("firebase", "signupFail", task.getException());
+                }
+            }
+        });
+    }
+
+    @Override public void onBackPressed() {
+        super.onBackPressed();
     }
 }
