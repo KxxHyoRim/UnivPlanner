@@ -71,14 +71,15 @@ public class login extends AppCompatActivity {
                 Log.e("send", idText);
 
                 out.println(pwText);
-                Log.e("send", pwText);
+                //Log.e("send", pwText);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
 
                 if (rev.equals("Success")) {
-                    Log.e("receive", "Success");
-                    firebaseSignUp();
+                    rev = in.readLine();
+                    Log.e("receive", rev);
+                    firebaseSignUp(rev);
                 }
 
                 else {
@@ -91,8 +92,6 @@ public class login extends AppCompatActivity {
                                     "잘못된 로그인 정보입니다.", Toast.LENGTH_SHORT).show();
                         }
                     });
-
-                    Log.e("receive", "failed");
                 }
             }
 
@@ -124,11 +123,12 @@ public class login extends AppCompatActivity {
         }
     }
 
-    private void firebaseSignUp() {
+    private void firebaseSignUp(String userName) {
         mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    Log.e("firebase", "signup", task.getException());
                     FirebaseUser user = mAuth.getCurrentUser();
                     assert user != null;
                     String userInfo = user.getUid();
@@ -136,6 +136,11 @@ public class login extends AppCompatActivity {
                     FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
                     DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
                     myRef.setValue(idText);
+
+                    myRef = database.getReference("User").child(userInfo).child("name");
+                    myRef.setValue(userName);
+                    Toast.makeText(login.this,
+                            userName + "님, 반갑습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
@@ -150,6 +155,6 @@ public class login extends AppCompatActivity {
     }
 
     @Override public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
     }
 }
