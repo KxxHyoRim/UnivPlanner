@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Vector;
 
 public class login extends AppCompatActivity {
     Button button;
@@ -31,6 +32,11 @@ public class login extends AppCompatActivity {
     String idText, pwText;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
+    String lectureNameList;
+    Vector<String> lectureNameVec = new Vector<String>();
+    Vector<String> lecturePercentVec = new Vector<String>();
+    Vector<String> lectureAssignmentVec = new Vector<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +97,14 @@ public class login extends AppCompatActivity {
                                     "로그인 성공", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    button.setText("강의 수강내역 확인중");
+
+                    button.setText("LMS 동기화중");
                     isLoginSuccess = true;
-                    String crawlingText = "";
+                    lectureNameList = "";
 
                     String userName = in.readLine();	//outer Lecture number
 
                     String totalLectureNumStr = in.readLine();	//outer Lecture number
-                    crawlingText += (totalLectureNumStr + "\n");
                     Log.e("total Lecture Num", totalLectureNumStr);
                     int totalLectureNum = Integer.parseInt(totalLectureNumStr);
 
@@ -109,28 +115,77 @@ public class login extends AppCompatActivity {
                             break;
                         }
 
-                        crawlingText += (lectureTitle + "\n");
+                        lectureNameList += (lectureTitle + "\n");
+                        lectureNameVec.add(lectureTitle);
+
                         Log.e("outer lecture title", lectureTitle);
 
                         String innerLectureNumStr = in.readLine();	// inner lecture number
-                        crawlingText += (innerLectureNumStr + "\n");
                         Log.e("inner lecture num: ", innerLectureNumStr);
                         int innerLectureNum = Integer.parseInt(innerLectureNumStr);
 
+                        String innerLecturePercentStr = "";
+                        innerLecturePercentStr += (innerLectureNum + "\n");
+
+                        if (innerLectureNum > 0) {
+                            String innerLecturePeriod = in.readLine();	// inner lecture number
+                            innerLecturePercentStr += (innerLecturePeriod + "\n");
+                            Log.e("inner lecture period: ", innerLecturePeriod);
+                        }
+
                         for (int j = 0; j < innerLectureNum; j++) {
                             String innerLecturePer = in.readLine();	// inner lecture percentage text
-                            crawlingText += (innerLecturePer + " ");
+                            innerLecturePercentStr += (innerLecturePer + " ");
                             Log.e("inner lecture percent: ", innerLecturePer);
                         }
 
-                        crawlingText += "\n";
+                        String innerAssignmentStr = "";
+                        String innerAssignmentNumStr = in.readLine();	// inner lecture number
+                        Log.e("total assignment num: ", innerAssignmentNumStr);
+
+                        if (!innerAssignmentNumStr.equals("AssignmentDone")) {
+                            int innerAssignmentNum = Integer.parseInt(innerAssignmentNumStr);
+                            int realAssignNum = 0;
+
+                            for (int j = 0; j < innerAssignmentNum; j++) {
+                                String assignmentName = in.readLine();	// inner lecture percentage text
+
+                                if (assignmentName.equals("AssignmentDone")) {
+                                    break;
+                                }
+
+                                innerAssignmentStr += (assignmentName + "\n");
+                                Log.e("inner assign name:", assignmentName);
+
+                                String isAssignmentSubmitted = in.readLine();	// inner lecture percentage text
+                                innerAssignmentStr += (isAssignmentSubmitted + "\n");
+                                Log.e("inner assign submitted:", isAssignmentSubmitted);
+
+                                String assignmentPeriod = in.readLine();	// inner lecture percentage text
+                                innerAssignmentStr += (assignmentPeriod + "\n");
+                                Log.e("inner assign period:", assignmentPeriod);
+                                realAssignNum++;
+                            }
+
+                            innerAssignmentStr = realAssignNum + "\n" + innerAssignmentStr;
+                        }
+
+                        else {
+                            innerAssignmentStr += "0\n";
+                        }
+
+                        lecturePercentVec.add(innerLecturePercentStr);
+                        lectureAssignmentVec.add(innerAssignmentStr);
                     }
 
                     String realLectureNumStr = in.readLine();	// inner lecture number
-                    crawlingText += (realLectureNumStr + "\n");
                     Log.e("Real Lecture Num", realLectureNumStr);
 
-                    firebaseSignUp(userName, crawlingText);
+                    Log.e("lectureNameVec", lectureNameVec.size() + "");
+                    Log.e("lecturePercentVec", lecturePercentVec.size() + "");
+                    Log.e("lectureAssignmentVec", lectureAssignmentVec.size() + "");
+
+                    firebaseSignUp(userName);
                 }
 
                 else {
@@ -149,8 +204,8 @@ public class login extends AppCompatActivity {
 
             catch (Exception e) {
                 isLoginSuccess = false;
-                button.setText("로그인");
-                button.setEnabled(true);
+                //button.setText("로그인");
+                //button.setEnabled(true);
 
                 login.this.runOnUiThread(new Runnable() {
                     public void run() {
@@ -176,7 +231,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    private void firebaseSignUp(String userName, String crawlingText) {
+    private void firebaseSignUp(String userName) {
         mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -193,14 +248,27 @@ public class login extends AppCompatActivity {
                     myRef = database.getReference("User").child(userInfo).child("name");
                     myRef.setValue(userName);
 
-                    myRef = database.getReference("User").child(userInfo).child("crawling");
-                    myRef.setValue(crawlingText);
+                    myRef = database.getReference("User").child(userInfo).child("lectureName");
+                    myRef.setValue(lectureNameVec.size() + "\n" + lectureNameList);
+
+                    for (int i = 0; i < lectureNameVec.size(); i++) {
+                        String lectureName = lectureNameVec.get(i);
+                        myRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
+                        String lecturePercent = lecturePercentVec.get(i);
+                        myRef.setValue(lecturePercent);
+                        Log.e("setFB percent", i + "");
+
+                        myRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
+                        String lectureAssignment = lectureAssignmentVec.get(i);
+                        myRef.setValue(lectureAssignment);
+                        Log.e("setFB assign", i + "");
+                    }
 
                     Toast.makeText(login.this,
                             userName + "님, 반갑습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("crawlingText", crawlingText);
+                    intent.putExtra("crawlingText", "Have to Get Firebase DB");
                     startActivity(intent);
                 }
 
