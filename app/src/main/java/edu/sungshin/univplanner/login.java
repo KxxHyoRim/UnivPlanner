@@ -240,6 +240,7 @@ public class login extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     assert user != null;
                     String userInfo = user.getUid();
+                    Log.e("fb uid", userInfo);
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
                     DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
