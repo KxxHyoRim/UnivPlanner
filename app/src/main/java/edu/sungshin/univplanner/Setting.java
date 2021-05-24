@@ -29,11 +29,7 @@ public class Setting extends PreferenceFragment {
 
         addPreferencesFromResource(R.xml.setting);
 
-
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-
-
         prefs.registerOnSharedPreferenceChangeListener(prefListener1);
 
     }// onCreate
