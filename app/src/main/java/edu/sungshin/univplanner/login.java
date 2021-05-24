@@ -85,6 +85,12 @@ public class login extends AppCompatActivity {
                 Log.e("receive", rev);
 
                 if (rev.equals("Success")) {
+                    login.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(login.this,
+                                    "로그인 성공", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     button.setText("강의 수강내역 확인중");
                     isLoginSuccess = true;
                     String crawlingText = "";
@@ -113,10 +119,16 @@ public class login extends AppCompatActivity {
 
                         for (int j = 0; j < innerLectureNum; j++) {
                             String innerLecturePer = in.readLine();	// inner lecture percentage text
-                            crawlingText += (innerLecturePer + "\n");
+                            crawlingText += (innerLecturePer + " ");
                             Log.e("inner lecture percent: ", innerLecturePer);
                         }
+
+                        crawlingText += "\n";
                     }
+
+                    String realLectureNumStr = in.readLine();	// inner lecture number
+                    crawlingText += (realLectureNumStr + "\n");
+                    Log.e("Real Lecture Num", realLectureNumStr);
 
                     firebaseSignUp(userName, crawlingText);
                 }
