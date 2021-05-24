@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.UnivPlanner" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.UnivPlanner" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -15,7 +15,22 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <!-- Customize your theme here. -->
+        <!-- font -->
+        <item name="android:textViewStyle">@style/customTextViewFontStyle</item>
+        <item name="android:buttonStyle">@style/customButtonFontStyle</item>
+        <item name="android:editTextStyle">@style/customEditTextFontStyle</item>
+        <item name="android:radioButtonStyle">@style/customRadioButtonFontStyle</item>
+        <item name="android:checkboxStyle">@style/customCheckboxFontStyle</item>
+        <!-- Disable DarkMode -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+
     </style>
+
+    <style name="customfontstyle" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/nanum_squre_regular</item>
+    </style>
+
 
     <!-- Theme for Splash by Hyorim -->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">

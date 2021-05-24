@@ -11,22 +11,27 @@
         android:id="@+id/Univname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:text="성신여자대학교"
-        android:textSize="19dp"
+        android:textSize="15dp"
         android:layout_marginTop="100dp"
         android:textColor="#000000" />
     <TextView
         android:id="@+id/appname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:text="UnivPlanner"
-        android:textSize="35dp"
+        android:textSize="30dp"
+        android:textStyle="bold"
         android:layout_marginBottom="40dp"
         android:textColor="#000000"/>
     <EditText
         android:id="@+id/login_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_squre_regular"
+        android:textSize="13dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
@@ -36,6 +41,8 @@
         android:id="@+id/login_pw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_squre_regular"
+        android:textSize="13dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp"
@@ -47,6 +54,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/nanum_squre_regular"
         android:text="로그인"
         android:textSize="15dp"
         android:backgroundTint="@color/purple_200"
@@ -63,6 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:fontFamily="@font/nanum_squre_regular"
             android:text="아이디저장"
             android:textSize="13dp" />
 
@@ -70,6 +79,7 @@
             android:id="@+id/login_checkbox_pw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_squre_regular"
             android:text="자동로그인"
             android:textSize="13dp" />
     </LinearLayout>
@@ -82,11 +92,12 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="228dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:textSize="13dp"
             android:layout_gravity="center"
-            android:text="아이디저장 및 자동 로그인은 공개된 장소의 단말기에서는 사용을 권하지 않습니다." />
+            android:layout_marginTop="100dp"
+            android:text="아이디저장 및 자동 로그인은 공개된 장소의\n단말기에서는 사용을 권하지 않습니다." />
     </LinearLayout>
 
 
