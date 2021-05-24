@@ -42,7 +42,6 @@ public class ListViewAdapter extends BaseAdapter {
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         TextView d_dayTextView = (TextView) convertView.findViewById(R.id.listview_day);
         TextView NameTextView = (TextView) convertView.findViewById(R.id.lecture_name) ;
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.lecture_title) ;
         TextView deadlineTextView = (TextView) convertView.findViewById(R.id.lecture_deadline) ;
         TextView isDoneTextView = (TextView) convertView.findViewById(R.id.lecture_isdone) ;
 
@@ -51,7 +50,6 @@ public class ListViewAdapter extends BaseAdapter {
 
         // 아이템 내 각 위젯에 데이터 반영
         d_dayTextView.setText(listViewItem.getD_day());
-        titleTextView.setText(listViewItem.getTitle());
         NameTextView.setText(listViewItem.getLectureName());
         deadlineTextView.setText(listViewItem.getDeadline());
         isDoneTextView.setText(listViewItem.getIsDone());
@@ -77,7 +75,6 @@ public class ListViewAdapter extends BaseAdapter {
 
         item.setD_day(d_day);
         item.setLectureName(name);
-        item.setTitle(title);
         item.setDeadline(deadline);
         item.setIsDone(isDone);
 

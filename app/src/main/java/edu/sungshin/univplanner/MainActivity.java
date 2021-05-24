@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,9 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
-
-            //Custom ListView
-            //ArrayList<ListViewItem>
         });
     }
 
