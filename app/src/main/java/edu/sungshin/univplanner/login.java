@@ -70,7 +70,7 @@ public class login extends AppCompatActivity {
 
     protected class ClientThread extends Thread {
         public void run() {
-            String host = "ec2-13-209-76-12.ap-northeast-2.compute.amazonaws.com";
+            String host = "ec2-54-180-150-238.ap-northeast-2.compute.amazonaws.com";
             int port = 8080;
 
             try {

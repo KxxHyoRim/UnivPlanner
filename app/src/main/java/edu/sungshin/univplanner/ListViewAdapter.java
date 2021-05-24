@@ -70,7 +70,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String d_day, String name, String title, String deadline, String isDone) {
+    public void addItem(String d_day, String name, String deadline, String isDone) {
         ListViewItem item = new ListViewItem();
 
         item.setD_day(d_day);
