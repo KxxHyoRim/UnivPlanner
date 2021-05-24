@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         MainCenterText = (TextView) findViewById(R.id.MainCenterText);
-        MainCenterText.setMovementMethod(new ScrollingMovementMethod());
 
         JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
         jsoupAsyncTask.execute();
@@ -142,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
+
+            //Custom ListView
+            //ArrayList<ListViewItem>
         });
     }
 
@@ -215,7 +217,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            MainCenterText.setText(htmlContentInStringFormat);
+            //MainCenterText.setText(htmlContentInStringFormat);
+            // 호연 크롤링부분 login에서 intent로 string 받아옴
+            Intent loginIntent = getIntent();
+            String crawlingText = loginIntent.getStringExtra("crawlingText");
+            MainCenterText.setText(crawlingText);
         }
     }
 
