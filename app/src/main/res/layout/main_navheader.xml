@@ -5,22 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="150dp" tools:srcCompat="@tools:sample/avatars"
-        android:id="@+id/imageView"
-        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp" app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/profileimage"
-        android:layout_marginLeft="24dp" />
+
     <TextView
         android:text="김성신"
         android:layout_margin="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:textSize="20dp"
         android:id="@+id/textView" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp" app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_marginTop="50dp"
+        android:paddingTop="100dp" app:layout_constraintTop_toBottomOf="@+id/imageView"
         android:textColor="#000"
         android:layout_marginLeft="24dp" />
     <TextView
@@ -31,6 +25,14 @@
         android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/textView"
         android:layout_marginStart="24dp" app:layout_constraintStart_toStartOf="parent" android:textColor="#000"
         android:layout_marginLeft="24dp" />
+
+    <View
+        android:id="@+id/block"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="20dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
