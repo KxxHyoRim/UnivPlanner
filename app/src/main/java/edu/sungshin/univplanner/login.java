@@ -30,6 +30,7 @@ public class login extends AppCompatActivity {
     EditText idEditText, pwEditText;
     String idText, pwText;
     private FirebaseAuth mAuth;
+    boolean isLoginSuccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +41,23 @@ public class login extends AppCompatActivity {
         idEditText = (EditText) findViewById(R.id.login_id);
         pwEditText = (EditText) findViewById(R.id.login_pw);
 
+        if (!isLoginSuccess) {
+            button.setText("로그인");
+            button.setEnabled(true);
+        }
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                idText = idEditText.getText().toString();
-                pwText = pwEditText.getText().toString();
-                button.setText("로그인 정보 확인중");
-                button.setEnabled(false);
-                Log.e("btn", "click");
-                ClientThread thread = new ClientThread();
-                thread.start();
+                if (!isLoginSuccess) {
+                    idText = idEditText.getText().toString();
+                    pwText = pwEditText.getText().toString();
+                    button.setText("로그인 정보 확인중");
+                    button.setEnabled(false);
+                    Log.e("btn", "click");
+                    ClientThread thread = new ClientThread();
+                    thread.start();
+                }
             }
         });
     }
@@ -71,18 +79,50 @@ public class login extends AppCompatActivity {
                 Log.e("send", idText);
 
                 out.println(pwText);
-                //Log.e("send", pwText);
+                Log.e("send", pwText);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
 
                 if (rev.equals("Success")) {
-                    rev = in.readLine();
-                    Log.e("receive", rev);
-                    firebaseSignUp(rev);
+                    button.setText("강의 수강내역 확인중");
+                    isLoginSuccess = true;
+                    String crawlingText = "";
+
+                    String userName = in.readLine();	//outer Lecture number
+
+                    String totalLectureNumStr = in.readLine();	//outer Lecture number
+                    crawlingText += (totalLectureNumStr + "\n");
+                    Log.e("total Lecture Num", totalLectureNumStr);
+                    int totalLectureNum = Integer.parseInt(totalLectureNumStr);
+
+                    for (int i = 0; i < totalLectureNum; i++) {
+                        String lectureTitle = in.readLine();	// outer lecture title
+
+                        if (lectureTitle.equals("LectureDone")) {   // if 비정규과목, break
+                            break;
+                        }
+
+                        crawlingText += (lectureTitle + "\n");
+                        Log.e("outer lecture title", lectureTitle);
+
+                        String innerLectureNumStr = in.readLine();	// inner lecture number
+                        crawlingText += (innerLectureNumStr + "\n");
+                        Log.e("inner lecture num: ", innerLectureNumStr);
+                        int innerLectureNum = Integer.parseInt(innerLectureNumStr);
+
+                        for (int j = 0; j < innerLectureNum; j++) {
+                            String innerLecturePer = in.readLine();	// inner lecture percentage text
+                            crawlingText += (innerLecturePer + "\n");
+                            Log.e("inner lecture percent: ", innerLecturePer);
+                        }
+                    }
+
+                    firebaseSignUp(userName, crawlingText);
                 }
 
                 else {
+                    isLoginSuccess = false;
                     button.setText("로그인");
                     button.setEnabled(true);
 
@@ -96,6 +136,7 @@ public class login extends AppCompatActivity {
             }
 
             catch (Exception e) {
+                isLoginSuccess = false;
                 button.setText("로그인");
                 button.setEnabled(true);
 
@@ -123,7 +164,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    private void firebaseSignUp(String userName) {
+    private void firebaseSignUp(String userName, String crawlingText) {
         mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -139,10 +180,15 @@ public class login extends AppCompatActivity {
 
                     myRef = database.getReference("User").child(userInfo).child("name");
                     myRef.setValue(userName);
+
+                    myRef = database.getReference("User").child(userInfo).child("crawling");
+                    myRef.setValue(crawlingText);
+
                     Toast.makeText(login.this,
                             userName + "님, 반갑습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra("crawlingText", crawlingText);
                     startActivity(intent);
                 }
 
@@ -152,9 +198,5 @@ public class login extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    @Override public void onBackPressed() {
-        //super.onBackPressed();
     }
 }
