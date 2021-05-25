@@ -1,6 +1,7 @@
 package edu.sungshin.univplanner;
 
 import android.graphics.Camera;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -50,6 +52,7 @@ public class fragment_lecture extends Fragment {
     String[] percentage_array;
     int percentage_sum=0;
     String isDone;
+    TextView is_done_text;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -120,6 +123,7 @@ public class fragment_lecture extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_lecture, container, false);
         View listItem = inflater.inflate(R.layout.listview_item, container, false);
 
+        is_done_text = (TextView) listItem.findViewById(R.id.lecture_isdone);
         /*--------------Custom ListView---------------*/
         //Adapter 생성
         listview_adapter = new ListViewAdapter();
@@ -151,7 +155,6 @@ public class fragment_lecture extends Fragment {
 
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
-                    
 
                     DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
                     percentageRef.addValueEventListener(new ValueEventListener() {
@@ -184,9 +187,15 @@ public class fragment_lecture extends Fragment {
                                 Log.e("수강도", percentage_average + "%");
 
                                 if(percentage_average==100)
+                                {
                                     isDone = "수강완료";
+                                    is_done_text.setTextColor(Color.parseColor("#0B7903"));
+                                }
                                 else
+                                {
                                     isDone = "미수강";
+                                    is_done_text.setTextColor(Color.parseColor("#B71C1C"));
+                                }
 
                                 if(d_day>=0)
                                     listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone);
