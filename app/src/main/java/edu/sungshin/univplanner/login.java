@@ -288,6 +288,7 @@ public class login extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.putExtra("crawlingText", "Have to Get Firebase DB");
                     startActivity(intent);
+                    finish();
                 }
 
                 else {
