@@ -462,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
                         Window window = dialog.getWindow();
                         dialog.show();
                         int x = (int)(size.x * 0.8f);
-                        int y = (int)(size.y * 0.7f);
+                        int y = (int)(size.y * 0.49f);
                         window.setAttributes(lp);
                         window.setLayout(x, y);
 
