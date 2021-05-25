@@ -6,12 +6,14 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.widget.BaseAdapter;
 
 import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -23,19 +25,16 @@ public class Setting extends PreferenceFragment {
 
     SharedPreferences prefs;
 
-    ListPreference soundPreference;
-    ListPreference keywordSoundPreference;
-    PreferenceScreen keywordScreen;
+    //데이터베이스 값 가져오기
+    private FirebaseDatabase myFirebaseDatabase;
+    private DatabaseReference myDatabaseReference;
+    private ChildEventListener myChildEventListener;
+    private FirebaseAuth mAuth;
 
 
-    // Hyorim FIrebase
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    FirebaseUser currentUser = mAuth.getCurrentUser();
-    String userInfo = currentUser.getUid();
-    FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
-    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
 
-    
+
+
 
 
     public void onCreate(@Nullable Bundle savedInstanceState) {

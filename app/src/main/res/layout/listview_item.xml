@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingRight="20dp"
+    android:paddingLeft="20dp" >
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:padding="3dp"
-        android:paddingBottom="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
             android:text="강의명"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="7dp"
             android:id="@+id/lecture_name"
-            android:textSize="16dp"
+            android:textSize="14dp"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:gravity="center_vertical"/>
         <TextView
             android:layout_width="match_parent"
             android:text="수강여부"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:id="@+id/lecture_isdone"
+            android:layout_marginTop="7dp"
             android:paddingRight="13dp"
             android:textStyle="bold"
             android:textSize="13dp"
@@ -32,15 +37,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:padding="5dp"
-            android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="3dp"
+        android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/listview_day"
                 android:layout_marginLeft="5dp"
-                android:textSize="18dp"
+                android:textSize="13dp"
                 android:text="d-day"
                 android:textColor="#B71C1C"
                 android:textStyle="bold"/>
@@ -48,18 +55,18 @@
                 android:id="@+id/lecture_deadline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="9dp"
+                android:layout_marginLeft="8dp"
                 android:gravity="center_vertical"
                 android:text="학습인정일"
                 android:textColor="@color/black"
-                android:textSize="13dp" />
+                android:textSize="12dp" />
     </LinearLayout>
     <ProgressBar
         android:layout_width="match_parent"
         android:id="@+id/progressBar"
         android:padding="5dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
         style="?android:attr/progressBarStyleHorizontal"
         android:max="100"
