@@ -98,7 +98,7 @@ public class login extends AppCompatActivity {
                         }
                     });
 
-                    button.setText("LMS 동기화중");
+                    button.setText("LMS 동기화 중");
                     isLoginSuccess = true;
                     lectureNameList = "";
 

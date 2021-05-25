@@ -10,7 +10,29 @@
 
         <PreferenceScreen
             android:key="optional_subject"
-            android:title="과목 선택">
+            android:title="표시할 강의 과목 선택">
+            <PreferenceScreen
+                android:title="표시할 강의 표시 선택"
+                android:summary="선택한 과목들만 알림을 받을 수 있습니다."/>
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="check_box_preference_1"
+                android:title="객지설" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="check_box_preference_2"
+                android:title="스모프" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="check_box_preference_3"
+                android:title="알고리즘" />
+
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="optional_subject"
+            android:title="표시할 과제 과목 선택">
             <PreferenceScreen
                 android:title="과목 선택"
                 android:summary="선택한 과목들만 알림을 받을 수 있습니다."/>
@@ -30,9 +52,11 @@
 
         </PreferenceScreen>
 
+        <!--
         <SwitchPreference
             android:key="alarm"
             android:title="알림 설정"/>
+         -->
 
         <PreferenceScreen
             android:title="앱버전"

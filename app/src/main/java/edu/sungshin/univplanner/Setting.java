@@ -10,6 +10,11 @@ import android.widget.BaseAdapter;
 
 import androidx.annotation.Nullable;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Created by amagr on 2018-01-01.
  */
@@ -22,6 +27,15 @@ public class Setting extends PreferenceFragment {
     ListPreference keywordSoundPreference;
     PreferenceScreen keywordScreen;
 
+
+    // Hyorim FIrebase
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    FirebaseUser currentUser = mAuth.getCurrentUser();
+    String userInfo = currentUser.getUid();
+    FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
+
+    
 
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
