@@ -115,13 +115,15 @@ public class Setting extends PreferenceFragment {
 
                 }
 
-                // CheckBoxPreference 삭제하는 코드
+                // CheckBoxPreference 삭제하는 코드 (xml에 과목 최대 8개로 만들어놈)
                 for (int i = 8; i > totalLectureNum; i--){
+                    // 강의
                     lecture_key = lecture_base_key + i;
                     rootPreference = (PreferenceScreen)findPreference("optional_subject_lecture");
                     subjPreference = (CheckBoxPreference)findPreference(lecture_key);
                     rootPreference.removePreference(subjPreference);
 
+                    // 과제
                     assignment_key = assignment_base_key + i;
                     rootPreference = (PreferenceScreen)findPreference("optional_subject_assignment");
                     subjPreference = (CheckBoxPreference)findPreference(assignment_key);
