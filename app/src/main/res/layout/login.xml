@@ -41,7 +41,7 @@
                 android:id="@+id/login_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_squre_regular"
+                android:fontFamily="@font/nanum_barun_gothic"
                 android:textSize="13dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -52,7 +52,7 @@
                 android:id="@+id/login_pw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/nanum_squre_regular"
+                android:fontFamily="@font/nanum_barun_gothic"
                 android:textSize="13dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -114,9 +114,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-
-
-
 
 </LinearLayout>
