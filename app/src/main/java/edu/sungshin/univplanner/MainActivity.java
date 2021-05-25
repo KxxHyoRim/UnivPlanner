@@ -499,11 +499,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        /*
+
         initialize();
         setLast_day(last_month);
         month(start_day);
-        */
+
 
         btn_previous.setOnClickListener(new View.OnClickListener() {
             @Override
