@@ -1,6 +1,7 @@
 package edu.sungshin.univplanner;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,11 @@ public class ListViewAdapter_assignment extends BaseAdapter {
         NameTextView.setText(listViewItem.getLectureName());
         deadlineTextView.setText(listViewItem.getDeadline());
         isDoneTextView.setText(listViewItem.getIsDone());
+
+        if (listViewItem.getIsDone().compareTo("제출")==0)
+            isDoneTextView.setTextColor(Color.parseColor("#0B7903"));
+        else
+            isDoneTextView.setTextColor(Color.parseColor("#B71C1C"));
 
         return convertView;
     }

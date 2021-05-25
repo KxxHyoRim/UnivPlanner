@@ -167,15 +167,6 @@ public class fragment_assignment extends Fragment {
                                 String deadline_Date = assignment_deadline.substring(0,10);
                                 long d_day = Dday(deadline_Date);  //디데이 구하기
 
-                                if(isDone_assignment.compareTo("제출")==0)
-                                {
-                                    isDone_textView.setTextColor(Color.parseColor("#0B7903"));
-                                }
-                                else
-                                {
-                                    isDone_textView.setTextColor(Color.parseColor("#B71C1C"));
-                                }
-
                                 if(d_day>=0)
                                     listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment);
                             }

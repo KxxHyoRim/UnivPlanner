@@ -189,12 +189,10 @@ public class fragment_lecture extends Fragment {
                                 if(percentage_average==100)
                                 {
                                     isDone = "수강완료";
-                                    is_done_text.setTextColor(Color.parseColor("#0B7903"));
                                 }
                                 else
                                 {
                                     isDone = "미수강";
-                                    is_done_text.setTextColor(Color.parseColor("#B71C1C"));
                                 }
 
                                 if(d_day>=0)
