@@ -2,24 +2,41 @@ package edu.sungshin.univplanner;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ListViewAdapter extends BaseAdapter {
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
+    private HashMap<Long, ListViewItem> hash_listView = new HashMap<Long, ListViewItem>();
 
     // ListViewAdapter의 생성자
     public ListViewAdapter() {
+
+    }
+
+    public void sort_hashMap(){
+        Log.e("sort 함수 진입","성공");
+        //해쉬맵 정렬
+        Object[] hashKey = hash_listView.keySet().toArray();
+        Arrays.sort(hashKey);
+
+        //ArrayList에 다시 정렬된 순서대로 저장
+        for (Long nKey : hash_listView.keySet())
+        {
+            Log.e("정렬된 HashMap: ", hash_listView.get(nKey).getD_day()+ "");
+            listViewItemList.add(hash_listView.get(nKey));
+        }
 
     }
 
@@ -79,7 +96,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String d_day, String name, String deadline, String isDone, int percent) {
+    public void addItem(String d_day, String name, String deadline, String isDone, int percent, long int_Dday) {
         ListViewItem item = new ListViewItem();
 
         item.setD_day(d_day);
@@ -88,6 +105,9 @@ public class ListViewAdapter extends BaseAdapter {
         item.setIsDone(isDone);
         item.setPercentage(percent);
 
-        listViewItemList.add(item);
+        //listViewItemList.add(item);
+        hash_listView.put(int_Dday, item);
+
+
     }
 }

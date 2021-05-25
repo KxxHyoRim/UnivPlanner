@@ -153,11 +153,13 @@ public class fragment_lecture extends Fragment {
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("total_lecture_num", totalLectureNum + "");
                 int percentage_average;
+
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
-
+                    int count_i=i;
                     DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
                     percentageRef.addValueEventListener(new ValueEventListener() {
+
                         @Override
                         public void onDataChange(@NotNull DataSnapshot snapshot){
                             full_percentage = snapshot.getValue(String.class);
@@ -196,17 +198,21 @@ public class fragment_lecture extends Fragment {
                                 }
 
                                 if(d_day>=0)
-                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average);
+                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average, d_day);
 
+                                if(count_i==totalLectureNum)
+                                    listview_adapter.sort_hashMap();
                                 percentage_sum =0; // 다시 초기화
                             }
-
                             listview_adapter.notifyDataSetChanged();
+
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error){}
                     });
+
                 }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error){}

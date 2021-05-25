@@ -140,11 +140,11 @@ public class fragment_assignment extends Fragment {
 
                 lectureName_array = lecture_fullList.split("\n");
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
-                Log.e("total_lecture_num", totalLectureNum + "");
+                Log.e("과제 total_lecture_num", totalLectureNum + "");
 
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
-
+                    int count_i=i;
                     DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
                     percentageRef.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -154,7 +154,7 @@ public class fragment_assignment extends Fragment {
 
                             assignment_array = full_assignment.split("\n");
                             int assignment_num = Integer.parseInt(assignment_array[0]);
-                            Log.e("percentage_num", assignment_num + "");
+                            Log.e("assignment_num", assignment_num + "");
 
                             if (assignment_num!=0) {
                                 String assignment_name = assignment_array[1];
@@ -168,8 +168,14 @@ public class fragment_assignment extends Fragment {
                                 long d_day = Dday(deadline_Date);  //디데이 구하기
 
                                 if(d_day>=0)
-                                    listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment);
+                                    listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
+
+                                if(count_i==totalLectureNum)
+                                {
+                                    listview_adapter.sort_hashMap();
+                                }
                             }
+                            //listview_adapter.sort_hashMap();
                             listview_adapter.notifyDataSetChanged();
                         }
                         @Override

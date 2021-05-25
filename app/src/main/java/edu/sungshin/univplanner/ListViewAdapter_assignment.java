@@ -2,6 +2,7 @@ package edu.sungshin.univplanner;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,20 +10,36 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 public class ListViewAdapter_assignment extends BaseAdapter {
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
-    private ArrayList<ListViewItem_assignment> listViewItem_List_assignment = new ArrayList<ListViewItem_assignment>() ;
-
+    private ArrayList<ListViewItem_assignment> listViewItemList_assignment = new ArrayList<ListViewItem_assignment>() ;
+    private HashMap<Long, ListViewItem_assignment> hash_listView_assignment = new HashMap<Long, ListViewItem_assignment>();
     // ListViewAdapter의 생성자
     public ListViewAdapter_assignment() {
+
+    }
+    public void sort_hashMap(){
+        Log.e("sort 함수 진입","성공");
+        //해쉬맵 정렬
+        Object[] hashKey = hash_listView_assignment.keySet().toArray();
+        Arrays.sort(hashKey);
+
+        //ArrayList에 다시 정렬된 순서대로 저장
+        for (Long nKey : hash_listView_assignment.keySet())
+        {
+            Log.e("정렬된 HashMap: ", hash_listView_assignment.get(nKey).getD_day()+ "");
+            listViewItemList_assignment.add(hash_listView_assignment.get(nKey));
+        }
 
     }
     // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
     @Override
     public int getCount() {
-        return listViewItem_List_assignment.size() ;
+        return listViewItemList_assignment.size() ;
     }
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
@@ -45,7 +62,7 @@ public class ListViewAdapter_assignment extends BaseAdapter {
         TextView isDoneTextView = (TextView) convertView.findViewById(R.id.assignment_isdone) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
-        ListViewItem_assignment listViewItem = listViewItem_List_assignment.get(position);
+        ListViewItem_assignment listViewItem = listViewItemList_assignment.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
         d_dayTextView.setText(listViewItem.getD_day());
@@ -71,11 +88,11 @@ public class ListViewAdapter_assignment extends BaseAdapter {
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
     public Object getItem(int position) {
-        return listViewItem_List_assignment.get(position) ;
+        return listViewItemList_assignment.get(position) ;
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String d_day, String name, String assignmentName, String deadline, String isDone) {
+    public void addItem(String d_day, String name, String assignmentName, String deadline, String isDone, long int_Dday) {
         ListViewItem_assignment item = new ListViewItem_assignment();
 
         item.setD_day(d_day);
@@ -84,6 +101,7 @@ public class ListViewAdapter_assignment extends BaseAdapter {
         item.setDeadline(deadline);
         item.setIsDone(isDone);
 
-        listViewItem_List_assignment.add(item);
+        //listViewItemList.add(item);
+        hash_listView_assignment.put(int_Dday, item);
     }
 }
