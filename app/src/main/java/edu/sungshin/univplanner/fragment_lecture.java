@@ -1,5 +1,6 @@
 package edu.sungshin.univplanner;
 
+import android.graphics.Camera;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +48,8 @@ public class fragment_lecture extends Fragment {
     int totalLectureNum;
     String[] lectureName_array;
     String[] percentage_array;
+    int percentage_sum=0;
+    String isDone;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,12 +92,33 @@ public class fragment_lecture extends Fragment {
 
     }
 
+    //디데이 구하는 함수
+    public static long Dday(String mday){
+        if(mday==null)
+            return 0;
+        mday = mday.trim();
+        int first = mday.indexOf(".");
+        int last = mday.lastIndexOf(".");
+        int year = Integer.parseInt(mday.substring(0,first));
+        int month = Integer.parseInt(mday.substring(first+1,last));
+        int day = Integer.parseInt(mday.substring(last+1,mday.length()));
+
+        GregorianCalendar cal = new GregorianCalendar();
+        long currentTime = cal.getTimeInMillis() / (1000*60*60*24);
+        cal.set(year,month-1,day);
+        long birthTime = cal.getTimeInMillis() / (1000*60*60*24);
+        int interval = (int)(birthTime-currentTime);
+
+        return interval;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_lecture, container, false);
+        View listItem = inflater.inflate(R.layout.listview_item, container, false);
 
         /*--------------Custom ListView---------------*/
         //Adapter 생성
@@ -98,6 +126,8 @@ public class fragment_lecture extends Fragment {
         //리스트뷰 참조 및 adapter 달기
         lecture_list = (ListView) rootView.findViewById(R.id.listView_lecture);
         lecture_list.setAdapter(listview_adapter);
+
+        ProgressBar myprogress_bar = (ProgressBar)listItem.findViewById(R.id.progressBar);
 
         /*--------------크롤링 데이터 DB에서 가져오기-------------------*/
         //로그인한 유저의 정보 가져오기
@@ -122,6 +152,7 @@ public class fragment_lecture extends Fragment {
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
 
+
                     DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
                     percentageRef.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -133,9 +164,34 @@ public class fragment_lecture extends Fragment {
                             int percentage_num = Integer.parseInt(percentage_array[0]);
                             Log.e("percentage_num", percentage_num + "");
 
-                            String lecture_deadline = percentage_array[1];
+                            if (percentage_num!=0) {
+                                String lecture_deadline = percentage_array[1].substring(9,percentage_array[1].length());
+                                Log.e("lecture_deadline", lecture_deadline + "");
 
-                            listview_adapter.addItem("D-4",lectureName,lecture_deadline,"미수강");
+                                String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~")+2,lecture_deadline.lastIndexOf("~")+13);
+                                long d_day = Dday(deadline_Date);  //디데이 구하기
+
+                                //수강도 (퍼센트 구하기)
+                                for(int j=0; j<percentage_num; j++){
+                                    percentage_sum += Integer.parseInt(percentage_array[2].substring(0,percentage_array[2].indexOf("%")));
+                                    percentage_array[2] = percentage_array[2].substring(percentage_array[2].indexOf("%")+2,percentage_array[2].length());
+                                }
+
+                                int percentage_average = percentage_sum/percentage_num;
+                                //myprogress_bar.setIndeterminate(false);
+                                myprogress_bar.setProgress(percentage_average);
+
+                                Log.e("수강도", percentage_average + "%");
+
+                                if(percentage_average==100)
+                                    isDone = "수강완료";
+                                else
+                                    isDone = "미수강";
+
+                                if(d_day>0)
+                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone);
+                            }
+                            listview_adapter.notifyDataSetChanged();
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error){}
@@ -145,7 +201,6 @@ public class fragment_lecture extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error){}
         });
-
 
         return rootView;
     }

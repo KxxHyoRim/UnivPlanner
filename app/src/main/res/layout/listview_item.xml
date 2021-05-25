@@ -15,7 +15,7 @@
             android:text="강의명"
             android:layout_margin="7dp"
             android:id="@+id/lecture_name"
-            android:textSize="18dp"
+            android:textSize="16dp"
             android:textColor="@color/black"
             android:gravity="center_vertical"/>
         <TextView
@@ -23,7 +23,7 @@
             android:text="수강여부"
             android:layout_height="30dp"
             android:id="@+id/lecture_isdone"
-            android:paddingRight="15dp"
+            android:paddingRight="13dp"
             android:textStyle="bold"
             android:textSize="13dp"
             android:textColor="#B71C1C"
@@ -40,7 +40,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/listview_day"
                 android:layout_marginLeft="5dp"
-                android:textSize="20dp"
+                android:textSize="18dp"
                 android:text="d-day"
                 android:textColor="#B71C1C"
                 android:textStyle="bold"/>
@@ -52,16 +52,16 @@
                 android:gravity="center_vertical"
                 android:text="학습인정일"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="13dp" />
     </LinearLayout>
     <ProgressBar
         android:layout_width="match_parent"
+        android:id="@+id/progressBar"
         android:padding="5dp"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="15dp"
         android:layout_height="wrap_content"
         style="?android:attr/progressBarStyleHorizontal"
         android:max="100"
-        android:progressTint="@color/colorGray"
-        android:progress="20"/>
+        android:progressTint="@color/colorGray"/>
 </LinearLayout>
