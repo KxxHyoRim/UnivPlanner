@@ -152,7 +152,7 @@ public class fragment_lecture extends Fragment {
                 lectureName_array = lecture_fullList.split("\n");
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("total_lecture_num", totalLectureNum + "");
-
+                int percentage_average;
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
 
@@ -196,10 +196,11 @@ public class fragment_lecture extends Fragment {
                                 }
 
                                 if(d_day>=0)
-                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone);
+                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average);
 
                                 percentage_sum =0; // 다시 초기화
                             }
+
                             listview_adapter.notifyDataSetChanged();
                         }
                         @Override

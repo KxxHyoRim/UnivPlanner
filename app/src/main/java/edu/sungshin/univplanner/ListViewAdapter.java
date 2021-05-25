@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class ListViewAdapter extends BaseAdapter {
         TextView NameTextView = (TextView) convertView.findViewById(R.id.lecture_name) ;
         TextView deadlineTextView = (TextView) convertView.findViewById(R.id.lecture_deadline) ;
         TextView isDoneTextView = (TextView) convertView.findViewById(R.id.lecture_isdone) ;
+        ProgressBar percentProgress = (ProgressBar) convertView.findViewById(R.id.progressBar) ;
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         ListViewItem listViewItem = listViewItemList.get(position);
@@ -54,6 +56,7 @@ public class ListViewAdapter extends BaseAdapter {
         NameTextView.setText(listViewItem.getLectureName());
         deadlineTextView.setText(listViewItem.getDeadline());
         isDoneTextView.setText(listViewItem.getIsDone());
+        percentProgress.setProgress(listViewItem.getPercentage());
 
         if (listViewItem.getIsDone().compareTo("수강완료")==0)
             isDoneTextView.setTextColor(Color.parseColor("#0B7903"));
@@ -76,13 +79,14 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
-    public void addItem(String d_day, String name, String deadline, String isDone) {
+    public void addItem(String d_day, String name, String deadline, String isDone, int percent) {
         ListViewItem item = new ListViewItem();
 
         item.setD_day(d_day);
         item.setLectureName(name);
         item.setDeadline(deadline);
         item.setIsDone(isDone);
+        item.setPercentage(percent);
 
         listViewItemList.add(item);
     }

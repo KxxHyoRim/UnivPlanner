@@ -7,6 +7,7 @@ public class ListViewItem {
     private String d_day;
     private String deadline;
     private String isDone;
+    private int percentage;
 
     public void setLectureName(String name){
         this.lectureName = name;
@@ -24,10 +25,12 @@ public class ListViewItem {
         this.isDone = isDone;
     }
 
+    public void setPercentage(int percent) { this.percentage = percent;}
+
     public String getLectureName(){
         return this.lectureName;
     }
-
+    public int getPercentage() { return this.percentage;}
     public String getD_day(){
         return this.d_day;
     }
