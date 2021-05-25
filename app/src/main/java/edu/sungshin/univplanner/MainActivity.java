@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.main);
 
-
         //MainCenterText = (TextView) findViewById(R.id.MainCenterText);
 
         JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
@@ -138,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
         //toolBar를 통해 App Bar 생성
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //App Bar의 좌측 영영에 Drawer를 Open 하기 위한 Incon 추가
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

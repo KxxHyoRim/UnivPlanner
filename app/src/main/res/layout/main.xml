@@ -16,7 +16,7 @@
             android:id="@+id/view_toolbar"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@android:color/black"
+            android:background="@color/light_Gray"
             android:layout_below="@+id/toolbar"/>
 
         <androidx.appcompat.widget.Toolbar
@@ -25,6 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_tmp_smallsize"/>
         </androidx.appcompat.widget.Toolbar>
 
         <TableLayout
@@ -1059,18 +1064,26 @@
             </TableRow>
         </TableLayout>
 
+        <View
+            android:layout_marginTop="10dp"
+            android:id="@+id/viewLine"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/light_Gray"
+            android:layout_below="@+id/tableLayout1"/>
 
         <androidx.viewpager.widget.ViewPager
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tableLayout1"
+            android:layout_marginTop="18dp"
             android:id="@+id/viewPager"
             >
             <androidx.viewpager.widget.PagerTitleStrip
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:background="@android:color/darker_gray"
+                android:background="@color/purple_200"
                 android:textColor="#000000"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"/>
