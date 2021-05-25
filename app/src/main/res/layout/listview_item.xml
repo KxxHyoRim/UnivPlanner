@@ -63,5 +63,6 @@
         android:layout_height="wrap_content"
         style="?android:attr/progressBarStyleHorizontal"
         android:max="100"
+        android:progress="50"
         android:progressTint="@color/colorGray"/>
 </LinearLayout>

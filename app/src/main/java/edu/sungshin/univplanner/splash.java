@@ -17,7 +17,7 @@ public class splash extends Activity {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, login.class);
         intent.putExtra("state", "launch");
 
         startActivity(intent);

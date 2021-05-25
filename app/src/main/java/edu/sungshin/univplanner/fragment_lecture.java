@@ -151,7 +151,7 @@ public class fragment_lecture extends Fragment {
 
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
-
+                    
 
                     DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
                     percentageRef.addValueEventListener(new ValueEventListener() {
@@ -170,7 +170,7 @@ public class fragment_lecture extends Fragment {
 
                                 String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~")+2,lecture_deadline.lastIndexOf("~")+13);
                                 long d_day = Dday(deadline_Date);  //디데이 구하기
-
+                                Log.e("강의 수강 퍼센트", percentage_array[2] + "");
                                 //수강도 (퍼센트 구하기)
                                 for(int j=0; j<percentage_num; j++){
                                     percentage_sum += Integer.parseInt(percentage_array[2].substring(0,percentage_array[2].indexOf("%")));
@@ -178,7 +178,7 @@ public class fragment_lecture extends Fragment {
                                 }
 
                                 int percentage_average = percentage_sum/percentage_num;
-                                //myprogress_bar.setIndeterminate(false);
+                                myprogress_bar.setIndeterminate(false);
                                 myprogress_bar.setProgress(percentage_average);
 
                                 Log.e("수강도", percentage_average + "%");
@@ -188,8 +188,10 @@ public class fragment_lecture extends Fragment {
                                 else
                                     isDone = "미수강";
 
-                                if(d_day>0)
+                                if(d_day>=0)
                                     listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone);
+
+                                percentage_sum =0; // 다시 초기화
                             }
                             listview_adapter.notifyDataSetChanged();
                         }
