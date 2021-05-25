@@ -63,8 +63,6 @@ public class Setting extends PreferenceFragment {
         lectureListScreen = (PreferenceScreen)findPreference("optional_subject_lecture_in");
 
 
-
-
         /** firebase 연동 */
 
         //로그인한 유저의 정보 가져오기
@@ -132,26 +130,16 @@ public class Setting extends PreferenceFragment {
                 }
 
 
-
-
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
-
-
-
-
     }// onCreate
 
     SharedPreferences.OnSharedPreferenceChangeListener prefListener1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-
         }
     };
 
