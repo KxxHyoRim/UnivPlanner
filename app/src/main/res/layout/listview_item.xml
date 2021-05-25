@@ -1,53 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listview_day"
-        android:text="d-day"
-        android:gravity="center_horizontal"
-        android:layout_weight="6"/>
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_height="40dp"
+        android:padding="3dp"
+        android:paddingBottom="0dp"
+        android:orientation="horizontal">
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
             android:text="강의명"
+            android:layout_margin="7dp"
             android:id="@+id/lecture_name"
-            android:textSize="24dp"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="강의 제목"
-            android:id="@+id/lecture_title"
             android:textSize="16dp"
             android:textColor="@color/black"
             android:gravity="center_vertical"/>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="학습인정일"
-            android:id="@+id/lecture_deadline"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="수강여부"
+            android:layout_height="30dp"
             android:id="@+id/lecture_isdone"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:gravity="center_vertical"/>
+            android:paddingRight="13dp"
+            android:textStyle="bold"
+            android:textSize="13dp"
+            android:textColor="#B71C1C"
+            android:gravity="right"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:padding="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/listview_day"
+                android:layout_marginLeft="5dp"
+                android:textSize="18dp"
+                android:text="d-day"
+                android:textColor="#B71C1C"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/lecture_deadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:gravity="center_vertical"
+                android:text="학습인정일"
+                android:textColor="@color/black"
+                android:textSize="13dp" />
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:id="@+id/progressBar"
+        android:padding="5dp"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="15dp"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="50"
+        android:progressTint="@color/colorGray"/>
 </LinearLayout>
