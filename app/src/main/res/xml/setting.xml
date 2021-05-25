@@ -11,11 +11,11 @@
 
     <PreferenceScreen
         android:key="optional_subject_lecture"
-        android:title="표시할 강의 과목 선택">
+        android:title="표시할 강의 설정">
         <PreferenceScreen
             android:key="optional_subject_lecture_in"
-            android:title="표시할 강의 표시 선택"
-            android:summary="선택한 과목들만 알림을 받을 수 있습니다."/>
+            android:title="표시할 강의 선택"
+            android:summary="선택한 과목의 강의 정보만 표시됩니다."/>
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -54,10 +54,10 @@
 
         <PreferenceScreen
             android:key="optional_subject_assignment"
-            android:title="표시할 과제 과목 선택">
+            android:title="표시할 과제 설정">
             <PreferenceScreen
-                android:title="과목 선택"
-                android:summary="선택한 과목들만 알림을 받을 수 있습니다."/>
+                android:title="표시할 과제 설정"
+                android:summary="선택한 과목의 과제 정보만 표시됩니다."/>
 
             <CheckBoxPreference
                 android:defaultValue="true"

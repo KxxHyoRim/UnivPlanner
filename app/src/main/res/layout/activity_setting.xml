@@ -72,7 +72,7 @@
                     android:textColor="@color/black"
                     android:text="학번" />
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/std_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="65dp"
@@ -97,7 +97,7 @@
                     android:textSize="15dp"
                     android:text="이름" />
                 <TextView
-                    android:id="@+id/textView710"
+                    android:id="@+id/std_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
