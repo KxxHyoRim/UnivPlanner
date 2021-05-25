@@ -22,28 +22,32 @@
             android:key="lecture_subject1"
             android:title="객지설" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject2"
             android:title="스모프" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject3"
             android:title="알고리즘" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject4"
             android:title="알고리즘" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject5"
             android:title="알고리즘" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject6"
             android:title="알고리즘" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject7"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject8"
             android:title="알고리즘" />
 
     </PreferenceScreen>
@@ -56,32 +60,36 @@
                 android:summary="선택한 과목들만 알림을 받을 수 있습니다."/>
 
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_1"
+                android:defaultValue="true"
+                android:key="assignment_subject1"
                 android:title="객지설" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_2"
+                android:defaultValue="true"
+                android:key="assignment_subject2"
                 android:title="스모프" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_3"
+                android:defaultValue="true"
+                android:key="assignment_subject3"
                 android:title="알고리즘" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_4"
+                android:defaultValue="true"
+                android:key="assignment_subject4"
                 android:title="알고리즘" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_5"
+                android:defaultValue="true"
+                android:key="assignment_subject5"
                 android:title="알고리즘" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_6"
+                android:defaultValue="true"
+                android:key="assignment_subject6"
                 android:title="알고리즘" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="check_box_preference_7"
+                android:defaultValue="true"
+                android:key="assignment_subject7"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject8"
                 android:title="알고리즘" />
 
         </PreferenceScreen>
