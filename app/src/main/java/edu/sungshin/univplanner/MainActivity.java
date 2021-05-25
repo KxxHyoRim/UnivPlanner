@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
     int percentage_sum = 0;
     String isDone;
 
+    String full_assignment;
+    String[] assignment_array;
+    TextView isDone_textView;
+
     TextView nav_name;
     TextView nav_std_number;
     String name_from_firebase;
@@ -318,6 +322,46 @@ public class MainActivity extends AppCompatActivity {
                                 percentage_sum =0; // 다시 초기화
                             }
                             //listview_adapter.notifyDataSetChanged();
+                            /*
+                            initialize();
+                            setLast_day(last_month);
+                            month(start_day);
+                             */
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error){}
+                    });
+
+                    DatabaseReference percentageRef2 = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
+                    percentageRef2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NotNull DataSnapshot snapshot){
+                            full_assignment = snapshot.getValue(String.class);
+                            Log.e("lecture Name", lectureName);
+
+                            assignment_array = full_assignment.split("\n");
+                            int assignment_num = Integer.parseInt(assignment_array[0]);
+                            Log.e("percentage_num", assignment_num + "");
+
+                            if (assignment_num!=0) {
+                                String assignment_name = assignment_array[1];
+                                Log.e("assignment_name", assignment_name + "");
+
+                                String isDone_assignment = assignment_array[2];
+                                Log.e("isDone_assignment", isDone_assignment + "");
+
+                                String assignment_deadline = assignment_array[3];
+                                String deadline_Date = assignment_deadline.substring(0,10);
+                                String year = deadline_Date.substring(0, 4);
+                                String month = deadline_Date.substring(5, 7);
+                                String day = deadline_Date.substring(8, 10);
+                                int ass_or_lec = 0;
+                                long d_day = Dday(deadline_Date);  //디데이 구하기
+
+                                if(d_day>=0)
+                                    cals[cal_count++] = new cal(day, month, year, ass_or_lec, lectureName, isDone_assignment);
+                            }
+                            //listview_adapter.notifyDataSetChanged();
                             initialize();
                             setLast_day(last_month);
                             month(start_day);
@@ -487,9 +531,9 @@ public class MainActivity extends AppCompatActivity {
                                 name.setTextColor(Color.BLACK);
                                 String isDone_1 = cals[index2].isDone;
 
-                                if(isDone_1.equals("수강완료"))
+                                if(isDone_1.equals("수강완료") || isDone_1.equals("제출"))
                                     isDone.setTextColor(Color.parseColor("#0B7903"));
-                                else
+                                else if(isDone_1.equals("미수강") || isDone_1.equals("미제출"))
                                     isDone.setTextColor(Color.parseColor("#B71C1C"));
                                 isDone.setText(isDone_1);
                                 sche_count++;
