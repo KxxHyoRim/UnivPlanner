@@ -5,11 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".fragment_assignment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/listView_assignment"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="20dp"
-        android:textColor="#000000"
-        android:text="과제 리스트뷰 화면"/>
+        android:layout_width="match_parent"/>
 </FrameLayout>
