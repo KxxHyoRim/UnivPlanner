@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -44,10 +54,50 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
+class cal{
+    public String day;
+    public String month;
+    public String year;
+    public int ass_or_lec;
+    public String name;
+    public String isDone;
+
+    public cal(String day, String month, String year, int ass_or_lec, String name, String isDone){
+        this.day = day;
+        this.month = month;
+        this.year = year;
+        this.ass_or_lec = ass_or_lec;
+        this.name = name;
+        this.isDone = isDone;
+    }
+    public boolean check_ym(String year, String month){
+        return (this.year.equals(year) && this.month.equals(month));
+    }
+    public boolean check_ymd(String year, String month, String day){
+        return (this.year.equals(year) && this.month.equals(month) && this.day.equals(day));
+    }
+}
+
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseDatabase myFirebaseDatabase;
+    private DatabaseReference myDatabaseReference;
+    private ChildEventListener myChildEventListener;
+    private FirebaseAuth mAuth;
+    cal[] cals = new cal[50];
+    int cal_count = 0;
+
+    String lecture_fullList;
+    String full_percentage;
+    int totalLectureNum;
+    String[] lectureName_array;
+    String[] percentage_array;
+    int percentage_sum = 0;
+    String isDone;
 
     Button b;
     Toolbar toolbar;
@@ -86,6 +136,10 @@ public class MainActivity extends AppCompatActivity {
             R.id.sche22, R.id.sche23, R.id.sche24, R.id.sche25, R.id.sche26, R.id.sche27, R.id.sche28,
             R.id.sche29, R.id.sche30, R.id.sche31, R.id.sche32, R.id.sche33, R.id.sche34, R.id.sche35,
             R.id.sche36, R.id.sche37, R.id.sche38, R.id.sche39, R.id.sche40, R.id.sche41, R.id.sche42};
+    Integer[] nameid = {R.id.name1, R.id.name2, R.id.name3, R.id.name4, R.id.name5, R.id.name6, R.id.name7,
+            R.id.name8, R.id.name9, R.id.name10, R.id.name11};
+    Integer[] isDoneid = {R.id.isDone1, R.id.isDone2, R.id.isDone3, R.id.isDone4, R.id.isDone5, R.id.isDone6, R.id.isDone7,
+            R.id.isDone8, R.id.isDone9, R.id.isDone10, R.id.isDone11};
     int unchecked = 0;
     int start_day = 0;
     boolean[] clickable = new boolean[42];
@@ -193,6 +247,85 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userInfo = user.getUid();
+        Log.e("fb uid", userInfo);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        /*---------수강과목 리스트 먼저 가져오기-------------*/
+        DatabaseReference myRef = database.getReference("User").child(userInfo).child("lectureName");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NotNull DataSnapshot snapshot){
+                lecture_fullList = snapshot.getValue(String.class);
+                //Log.e("load letureName:", lecture_fullList + "");
+
+                lectureName_array = lecture_fullList.split("\n");
+                totalLectureNum = Integer.parseInt(lectureName_array[0]);
+                Log.e("total_lecture_num", totalLectureNum + "");
+
+                for(int i=1; i<totalLectureNum+1;i++){
+                    String lectureName = lectureName_array[i];
+
+
+                    DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
+                    percentageRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NotNull DataSnapshot snapshot){
+                            full_percentage = snapshot.getValue(String.class);
+                            Log.e("lecture Name", lectureName);
+
+                            percentage_array = full_percentage.split("\n");
+                            int percentage_num = Integer.parseInt(percentage_array[0]);
+                            Log.e("percentage_num", percentage_num + "");
+
+                            if (percentage_num!=0) {
+                                String lecture_deadline = percentage_array[1].substring(9,percentage_array[1].length());
+                                Log.e("lecture_deadline", lecture_deadline + "");
+
+                                String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~")+2,lecture_deadline.lastIndexOf("~")+12);
+                                String year = deadline_Date.substring(0, 4);
+                                String month = deadline_Date.substring(5, 7);
+                                String day = deadline_Date.substring(8, 10);
+                                int ass_or_lec = 1;
+                                long d_day = Dday(deadline_Date);  //디데이 구하기
+                                Log.e("강의 수강 퍼센트", percentage_array[2] + "");
+                                //수강도 (퍼센트 구하기)
+                                for(int j=0; j<percentage_num; j++){
+                                    percentage_sum += Integer.parseInt(percentage_array[2].substring(0,percentage_array[2].indexOf("%")));
+                                    percentage_array[2] = percentage_array[2].substring(percentage_array[2].indexOf("%")+2,percentage_array[2].length());
+                                }
+
+                                int percentage_average = percentage_sum/percentage_num;
+                                //myprogress_bar.setIndeterminate(false);
+                                //myprogress_bar.setProgress(percentage_average);
+
+                                Log.e("수강도", percentage_average + "%");
+
+                                if(percentage_average==100)
+                                    isDone = "수강완료";
+                                else
+                                    isDone = "미수강";
+
+                                if(d_day>=0)
+                                    cals[cal_count++] = new cal(day, month, year, ass_or_lec, lectureName, isDone);
+                                percentage_sum =0; // 다시 초기화
+                            }
+                            //listview_adapter.notifyDataSetChanged();
+                            initialize();
+                            setLast_day(last_month);
+                            month(start_day);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error){}
+                    });
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error){}
+        });
 
         btn_previous = (Button) findViewById(R.id.previous);
         btn_next = (Button) findViewById(R.id.next);
@@ -273,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
                             text_day.setTextColor(Color.BLACK);
                             text_day2.setTextColor(Color.BLACK);
                         }
+
                         AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
                         dlg.setView(dialog_view);
                         Dialog dialog = dlg.create();
@@ -287,31 +421,45 @@ public class MainActivity extends AppCompatActivity {
                         int y = (int)(size.y * 0.7f);
                         window.setAttributes(lp);
                         window.setLayout(x, y);
-                    }
-                }
-            });
-        }
 
-        for(int i=0;i<42;i++) {
-            final int index;
-            index = i;
-            sche[index].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(clickable[index] == true) {
-                        /*
-                        day[unchecked].setBackgroundResource(0);
-                        unchecked = index;
-                        day[index].setBackgroundResource(R.drawable.textview_border);
-                        */
-                        sche[index].setBackgroundResource(R.drawable.underline);
+                        int sche_count = 0;
+                        String year = year_month.getText().toString().substring(0,4);
+                        String month = year_month.getText().toString().substring(5,7);
+                        String day_s = day[index].getText().toString();
+
+                        if(day_s.length() == 1)
+                            day_s = "0" + day_s;
+
+                        for(int j=0;j<cal_count;j++){
+                            final int index2;
+                            index2 = j;
+                            if(cals[index2].check_ymd(year, month, day_s)){
+                                TextView name = (TextView) dialog_view.findViewById(nameid[sche_count]);
+                                TextView isDone = (TextView) dialog_view.findViewById(isDoneid[sche_count]);
+
+                                String name_1 = cals[index2].ass_or_lec == 1 ? "[강의] " : "[과제] ";
+                                String name_2 = cals[index2].name;
+                                name.setText(name_1 + name_2);
+                                name.setTextColor(Color.BLACK);
+                                String isDone_1 = cals[index2].isDone;
+
+                                if(isDone_1.equals("수강완료"))
+                                    isDone.setTextColor(Color.parseColor("#0B7903"));
+                                else
+                                    isDone.setTextColor(Color.parseColor("#B71C1C"));
+                                isDone.setText(isDone_1);
+                                sche_count++;
+                            }
+                        }
                     }
                 }
             });
         }
+        /*
         initialize();
         setLast_day(last_month);
         month(start_day);
+        */
 
         btn_previous.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -444,6 +592,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static long Dday(String mday){
+        if(mday==null)
+            return 0;
+        mday = mday.trim();
+        int first = mday.indexOf(".");
+        int last = mday.lastIndexOf(".");
+        int year = Integer.parseInt(mday.substring(0,first));
+        int month = Integer.parseInt(mday.substring(first+1,last));
+        int day = Integer.parseInt(mday.substring(last+1,mday.length()));
+
+        GregorianCalendar cal = new GregorianCalendar();
+        long currentTime = cal.getTimeInMillis() / (1000*60*60*24);
+        cal.set(year,month-1,day);
+        long birthTime = cal.getTimeInMillis() / (1000*60*60*24);
+        int interval = (int)(birthTime-currentTime);
+
+        return interval;
+    }
+
     public void setStart_day(String date){
         String inputdate = date + "01";
         DateFormat dateFormat = new SimpleDateFormat("yyyy.MMdd");
@@ -455,8 +622,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
+
     public void month(int start_day2){
         /*for(int i=0;i<start_day2-1;i++){
             final int index;
@@ -468,9 +635,11 @@ public class MainActivity extends AppCompatActivity {
         for(int i=start_day2-1, j = 1;j<=last_day;i++, j++){
             final int index;
             index = i;
-            clickable[index] = true;
             day[index].setText(Integer.toString(j));
+            /*
+            clickable[index] = true;
             day[index].setBackgroundResource(R.drawable.click);
+             */
             if(year.equals(today_year) && month.equals(today_month) && j == today_day){
                 //Spannable span = (Spannable) day[index].getText();
                 //span.setSpan(new BackgroundColorSpan(Color.rgb(187, 134, 252)), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -485,7 +654,21 @@ public class MainActivity extends AppCompatActivity {
             day[index].setEnabled(false);
         }*/
         //year_month.setText(Integer.toString(start_day2-2)+" "+ Integer.toString(start_day2+last_day-1));
+
+        for(int i=0;i<cal_count;i++){
+            final int index;
+            index = i;
+            int index2 = Integer.parseInt(cals[index].day) + start_day - 2;
+            if(cals[index].check_ym(year, month)){
+                day[index2].setBackgroundResource(R.drawable.click);
+                clickable[index2] = true;
+                sche[index2].setBackgroundResource(R.drawable.underline);
+                if(cals[index].check_ymd(today_year, today_month, Integer.toString(today_day)))
+                    day[index2].setBackgroundResource(R.drawable.today_click);
+            }
+        }
     }
+
     public void initialize(){
         //day[unchecked].setBackgroundResource(0);
         for(int i=0;i<42;i++){
@@ -494,6 +677,7 @@ public class MainActivity extends AppCompatActivity {
             day[index].setText("");
             clickable[index] = false;
             day[index].setBackgroundResource(0);
+            sche[index].setBackgroundResource(0);
             if(index % 7 == 0)
                 day[index].setTextColor(Color.parseColor("#ED0000"));
             else if(index % 7 == 6)
