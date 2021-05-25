@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.logout:
                         Toast.makeText(getApplicationContext(), "로그아웃 클릭", Toast.LENGTH_SHORT).show();
+                        Intent intent2 = new Intent(getApplicationContext(), login.class);
+                        startActivity(intent2);
                         break;
                 }
 
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //super.onBackPressed();
         }
     }
 
