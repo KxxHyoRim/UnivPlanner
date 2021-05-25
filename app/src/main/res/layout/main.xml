@@ -30,8 +30,10 @@
         <TableLayout
             android:id="@+id/tableLayout1"
             android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:layout_below="@+id/view_toolbar">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view_toolbar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
