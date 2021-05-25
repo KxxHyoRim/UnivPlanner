@@ -50,6 +50,8 @@ public class login extends AppCompatActivity {
         if (!isLoginSuccess) {
             button.setText("로그인");
             button.setEnabled(true);
+            idEditText.setEnabled(true);
+            pwEditText.setEnabled(true);
         }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +60,9 @@ public class login extends AppCompatActivity {
                 if (!isLoginSuccess) {
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
-                    button.setText("로그인 정보 확인중");
+                    idEditText.setEnabled(false);
+                    pwEditText.setEnabled(false);
+                    button.setText("로그인 정보 확인중 ..");
                     button.setEnabled(false);
                     Log.e("btn", "click");
                     ClientThread thread = new ClientThread();
@@ -98,7 +102,7 @@ public class login extends AppCompatActivity {
                         }
                     });
 
-                    button.setText("LMS 동기화중");
+                    button.setText("LMS 동기화중 ..");
                     isLoginSuccess = true;
                     lectureNameList = "";
 
@@ -108,8 +112,15 @@ public class login extends AppCompatActivity {
                     Log.e("total Lecture Num", totalLectureNumStr);
                     int totalLectureNum = Integer.parseInt(totalLectureNumStr);
 
-                    for (int i = 0; i < totalLectureNum; i++) {
+                    String realTotalLectureNumStr = in.readLine();	//outer Lecture number
+                    Log.e("real total Lecture Num", realTotalLectureNumStr);
+                    int realTotalLectureNum = Integer.parseInt(realTotalLectureNumStr);
+
+                    for (int i = 0; i < realTotalLectureNum; i++) {
                         String lectureTitle = in.readLine();	// outer lecture title
+                        button.setText("LMS 동기화 "
+                                + Integer.toString(i) + " / " + realTotalLectureNumStr);
+
 
                         if (lectureTitle.equals("LectureDone")) {   // if 비정규과목, break
                             break;
@@ -190,13 +201,16 @@ public class login extends AppCompatActivity {
 
                 else {
                     isLoginSuccess = false;
-                    button.setText("로그인");
-                    button.setEnabled(true);
 
                     login.this.runOnUiThread(new Runnable() {
                         public void run() {
                             Toast.makeText(login.this,
                                     "잘못된 로그인 정보입니다.", Toast.LENGTH_SHORT).show();
+
+                            button.setText("로그인");
+                            button.setEnabled(true);
+                            idEditText.setEnabled(true);
+                            pwEditText.setEnabled(true);
                         }
                     });
                 }
@@ -204,13 +218,16 @@ public class login extends AppCompatActivity {
 
             catch (Exception e) {
                 isLoginSuccess = false;
-                //button.setText("로그인");
-                //button.setEnabled(true);
 
                 login.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(login.this,
                                 "잘못된 로그인 정보입니다.", Toast.LENGTH_SHORT).show();
+
+                        button.setText("로그인");
+                        button.setEnabled(true);
+                        idEditText.setEnabled(true);
+                        pwEditText.setEnabled(true);
                     }
                 });
 
