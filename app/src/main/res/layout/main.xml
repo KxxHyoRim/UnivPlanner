@@ -93,6 +93,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="일" />
 
                 <TextView
@@ -102,6 +103,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="월" />
 
                 <TextView
@@ -111,6 +113,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="화" />
 
                 <TextView
@@ -120,6 +123,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="수" />
 
                 <TextView
@@ -129,6 +133,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="목" />
 
                 <TextView
@@ -138,6 +143,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="금" />
 
                 <TextView
@@ -147,6 +153,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:textStyle="bold"
                     android:text="토" />
 
             </TableRow>
