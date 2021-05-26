@@ -164,7 +164,7 @@ public class fragment_assignment extends Fragment {
                                 Log.e("isDone_assignment", isDone_assignment + "");
 
                                 String assignment_deadline = assignment_array[3];
-                                String deadline_Date = assignment_deadline.substring(0,10);
+                                String deadline_Date = assignment_deadline.substring(0, 10);
                                 long d_day = Dday(deadline_Date);  //디데이 구하기
 
                                 if(d_day>=0)

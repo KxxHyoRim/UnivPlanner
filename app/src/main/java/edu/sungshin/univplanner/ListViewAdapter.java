@@ -12,13 +12,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class ListViewAdapter extends BaseAdapter {
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
-    private HashMap<Long, ListViewItem> hash_listView = new HashMap<Long, ListViewItem>();
+    private HashMap<ListViewItem, Long> hash_listView = new HashMap<ListViewItem, Long>();
 
     // ListViewAdapter의 생성자
     public ListViewAdapter() {
@@ -27,6 +30,18 @@ public class ListViewAdapter extends BaseAdapter {
 
     public void sort_hashMap(){
         Log.e("sort 함수 진입","성공");
+        // Map.Entry 리스트 작성
+        List keySetList = new ArrayList<>(hash_listView.keySet());
+
+        System.out.println("------value 오름차순------");
+        Collections.sort(keySetList, (o1, o2) -> (hash_listView.get(o1).compareTo(hash_listView.get(o2))));
+
+        for(ListViewItem key : hash_listView.keySet()) {
+            System.out.println("key : " + key + " / " + "value : " + hash_listView.get(key));
+            listViewItemList.add(key);
+        }
+
+        /*
         //해쉬맵 정렬
         Object[] hashKey = hash_listView.keySet().toArray();
         Arrays.sort(hashKey);
@@ -37,6 +52,7 @@ public class ListViewAdapter extends BaseAdapter {
             Log.e("정렬된 HashMap: ", hash_listView.get(nKey).getD_day()+ "");
             listViewItemList.add(hash_listView.get(nKey));
         }
+        */
 
     }
 
@@ -106,8 +122,6 @@ public class ListViewAdapter extends BaseAdapter {
         item.setPercentage(percent);
 
         //listViewItemList.add(item);
-        hash_listView.put(int_Dday, item);
-
-
+        hash_listView.put(item, int_Dday);
     }
 }
