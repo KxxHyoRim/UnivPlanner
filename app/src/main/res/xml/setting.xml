@@ -18,7 +18,7 @@
             android:summary="선택한 과목의 강의 정보만 표시됩니다."/>
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject1"
             android:title="객지설" />
         <CheckBoxPreference
