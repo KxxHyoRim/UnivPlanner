@@ -197,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
             public void onRefresh() {
                 Log.e("Swipe", "!!");
                 isSychronizedDone = false;
+                Toast.makeText(MainActivity.this,
+                        "동기화를 시작합니다", Toast.LENGTH_LONG).show();
                 MainActivity.ClientThread thread = new MainActivity.ClientThread();
                 thread.start();
-                Toast.makeText(MainActivity.this,
-                        "동기화를 시작합니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -964,7 +964,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.this.runOnUiThread(new Runnable() {
                     public void run() {
                         Toast.makeText(MainActivity.this,
-                                "동기화를 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                "동기화를 실패했습니다", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -1016,7 +1016,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     Toast.makeText(MainActivity.this,
-                            "동기화에 성공했습니다.", Toast.LENGTH_SHORT).show();
+                            "동기화에 성공했습니다", Toast.LENGTH_SHORT).show();
 
                     Intent intent = getIntent();
                     finish();
