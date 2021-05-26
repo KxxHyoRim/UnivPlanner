@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="15dp"
                     android:fontFamily="@font/nanum_squre_regular"
-                    android:text="아이디저장"
+                    android:text="아이디 저장"
                     android:textSize="13dp" />
 
                 <CheckBox
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanum_squre_regular"
-                    android:text="자동로그인"
+                    android:text="비밀번호 저장"
                     android:textSize="13dp" />
             </LinearLayout>
             <LinearLayout

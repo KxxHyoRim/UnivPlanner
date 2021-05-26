@@ -3,11 +3,15 @@ package edu.sungshin.univplanner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,8 @@ public class login extends AppCompatActivity {
     Button button;
     EditText idEditText, pwEditText;
     String idText, pwText;
+    CheckBox checkBoxID, checkBoxPW;
+    boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
     String lectureNameList;
@@ -46,6 +52,74 @@ public class login extends AppCompatActivity {
         button = (Button) findViewById(R.id.login_btn);
         idEditText = (EditText) findViewById(R.id.login_id);
         pwEditText = (EditText) findViewById(R.id.login_pw);
+        checkBoxID = (CheckBox) findViewById(R.id.login_checkbox_id);
+        checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
+
+        SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
+        String saveIDdata = pref.getString("id","");
+
+        pref = getSharedPreferences("savePW",MODE_PRIVATE);
+        String savePWdata = pref.getString("pw","");
+
+        checkBoxID.setChecked(false);
+        checkBoxPW.setChecked(false);
+
+        if (!saveIDdata.equals("")) {
+            idEditText.setText(saveIDdata);
+            checkBoxID.setChecked(true);
+        }
+
+        if (!savePWdata.equals("")) {
+            pwEditText.setText(savePWdata);
+            checkBoxPW.setChecked(true);
+        }
+
+        isIDcheckBoxChecked = false;
+        isPWcheckBoxChecked = false;
+
+        checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isIDcheckBoxChecked = true;
+                }
+
+                else {
+                    if (isPWcheckBoxChecked) {
+                        Log.e("check", "id x pw o");
+                        Toast.makeText(login.this,
+                                "비밀번호 저장을 먼저 해제해주세요", Toast.LENGTH_SHORT).show();
+                        isIDcheckBoxChecked = true;
+                        checkBoxID.setChecked(true);
+                    }
+
+                    else {
+                        isIDcheckBoxChecked = false;
+                    }
+                }
+            }
+        });
+
+        checkBoxPW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (!isIDcheckBoxChecked) {
+                        Log.e("check", "id x pw o");
+                        Toast.makeText(login.this,
+                                "아이디 저장을 먼저 선택해주세요", Toast.LENGTH_SHORT).show();
+                        isPWcheckBoxChecked = false;
+                        checkBoxPW.setChecked(false);
+                    }
+
+                    else {
+                        isPWcheckBoxChecked = true;
+                    }
+                }
+
+                else {
+                    isPWcheckBoxChecked = false;
+                }
+            }
+        });
 
         if (!isLoginSuccess) {
             button.setText("로그인");
@@ -60,6 +134,38 @@ public class login extends AppCompatActivity {
                 if (!isLoginSuccess) {
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
+
+                    if (checkBoxID.isChecked()) {
+                        SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
+                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
+                        editorID.putString("id", idText);
+                        editorID.apply();
+                        Log.e("checkBox", "ID");
+                        Log.e("SharedPreferences", "ID put");
+
+                        if (checkBoxPW.isChecked()) {
+                            SharedPreferences prefPW = getSharedPreferences("savePW", MODE_PRIVATE);
+                            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorPW = prefPW.edit();
+                            editorPW.putString("pw", pwText);
+                            editorPW.apply();
+                        }
+
+                        else {
+                            SharedPreferences prefPW = getSharedPreferences("savePW", MODE_PRIVATE);
+                            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorPW = prefPW.edit();
+                            editorPW.putString("pw", "");
+                            editorPW.apply();
+                        }
+                    }
+
+                    else {
+                        SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
+                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
+                        editorID.putString("id", "");
+                        editorID.apply();
+                    }
+
+
                     idEditText.setEnabled(false);
                     pwEditText.setEnabled(false);
                     button.setText("로그인 정보 확인중 ..");
