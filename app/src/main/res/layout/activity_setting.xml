@@ -43,12 +43,26 @@
                 android:textColor="@color/black"
                 android:text="프로필" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="wrap_content"
-                android:layout_height="102dp"
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp"
                 android:layout_gravity="center"
-                android:src="@drawable/profileimage"/>
+                android:id="@+id/al1">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:src="@drawable/profile"/>
+
+                <ImageView
+                    android:id="@+id/iv2"
+                    android:layout_gravity="bottom|left"
+                    android:layout_width="30px"
+                    android:layout_height="30px"
+                    android:src="@drawable/modi"/>
+
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
