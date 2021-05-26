@@ -6,8 +6,17 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -1090,7 +1099,7 @@
         </androidx.viewpager.widget.ViewPager>
 
     </RelativeLayout>
-
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <!--navigation drawer-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
