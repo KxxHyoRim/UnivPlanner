@@ -117,10 +117,12 @@ public class check_lecture_Activity extends AppCompatActivity {
                         startActivity(intent0);
                         break;
                     case R.id.assignment:
-                        Intent intent3 = new Intent(getApplicationContext(), check_lecture_Activity.class);
+                        Intent intent3 = new Intent(getApplicationContext(), check_assignment_Activity.class);
                         startActivity(intent3);
                         break;
                     case R.id.my_todo:
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent4);
                         break;
                     case R.id.setting:
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);

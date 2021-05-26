@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/my_todo"
+            android:title="홈 화면"
+            android:fontFamily="@font/nanum_squre_regular"/>
+        <item
             android:id="@+id/lecture"
             android:title="강의 수강도 확인"
             android:fontFamily="@font/nanum_squre_regular"/>
@@ -9,10 +13,7 @@
             android:id="@+id/assignment"
             android:title="과제 확인"
             android:fontFamily="@font/nanum_squre_regular"/>
-        <item
-            android:id="@+id/my_todo"
-            android:title="나의 일정"
-            android:fontFamily="@font/nanum_squre_regular"/>
+
     </group>
     <group android:checkableBehavior="single">
         <item
