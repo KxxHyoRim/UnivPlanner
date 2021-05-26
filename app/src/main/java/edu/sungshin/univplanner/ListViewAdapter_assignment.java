@@ -11,28 +11,33 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class ListViewAdapter_assignment extends BaseAdapter {
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ListViewItem_assignment> listViewItemList_assignment = new ArrayList<ListViewItem_assignment>() ;
-    private HashMap<Long, ListViewItem_assignment> hash_listView_assignment = new HashMap<Long, ListViewItem_assignment>();
+    private HashMap<ListViewItem_assignment, Long> hash_listView_assignment = new HashMap<ListViewItem_assignment, Long>();
+
     // ListViewAdapter의 생성자
     public ListViewAdapter_assignment() {
-
     }
-    public void sort_hashMap(){
-        Log.e("sort 함수 진입","성공");
-        //해쉬맵 정렬
-        Object[] hashKey = hash_listView_assignment.keySet().toArray();
-        Arrays.sort(hashKey);
 
-        //ArrayList에 다시 정렬된 순서대로 저장
-        for (Long nKey : hash_listView_assignment.keySet())
-        {
-            Log.e("정렬된 HashMap: ", hash_listView_assignment.get(nKey).getD_day()+ "");
-            listViewItemList_assignment.add(hash_listView_assignment.get(nKey));
+    public void sort_hashMap(){
+        Log.e("과제 sort 함수 진입","성공");
+        //해쉬맵 정렬
+        List keySetList = new ArrayList<>(hash_listView_assignment.keySet());
+
+        // 오름차순
+        System.out.println("------value 오름차순------");
+        Collections.sort(keySetList, (o1, o2) -> (hash_listView_assignment.get(o1).compareTo(hash_listView_assignment.get(o2))));
+
+        for(Object key : keySetList) {
+            System.out.println("key : " + key + " / " + "value : " + hash_listView_assignment.get(key));
+            ListViewItem_assignment item = (ListViewItem_assignment) key;
+            listViewItemList_assignment.add(item);
         }
 
     }
@@ -102,6 +107,6 @@ public class ListViewAdapter_assignment extends BaseAdapter {
         item.setIsDone(isDone);
 
         //listViewItemList.add(item);
-        hash_listView_assignment.put(int_Dday, item);
+        hash_listView_assignment.put(item, int_Dday);
     }
 }

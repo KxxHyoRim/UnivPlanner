@@ -142,6 +142,7 @@ public class fragment_assignment extends Fragment {
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("과제 total_lecture_num", totalLectureNum + "");
 
+                Log.e("for문 들어갈꺼야", totalLectureNum + "");
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
                     int count_i=i;
@@ -150,18 +151,18 @@ public class fragment_assignment extends Fragment {
                         @Override
                         public void onDataChange(@NotNull DataSnapshot snapshot){
                             full_assignment = snapshot.getValue(String.class);
-                            Log.e("lecture Name", lectureName);
+                            Log.e("lecture Name "+ count_i, lectureName);
 
                             assignment_array = full_assignment.split("\n");
                             int assignment_num = Integer.parseInt(assignment_array[0]);
-                            Log.e("assignment_num", assignment_num + "");
+                            Log.e("assignment_num"+ count_i, assignment_num + "");
 
                             if (assignment_num!=0) {
                                 String assignment_name = assignment_array[1];
-                                Log.e("assignment_name", assignment_name + "");
+                                //Log.e("assignment_name", assignment_name + "");
 
                                 String isDone_assignment = assignment_array[2];
-                                Log.e("isDone_assignment", isDone_assignment + "");
+                                //Log.e("isDone_assignment", isDone_assignment + "");
 
                                 String assignment_deadline = assignment_array[3];
                                 String deadline_Date = assignment_deadline.substring(0, 10);
@@ -170,13 +171,13 @@ public class fragment_assignment extends Fragment {
                                 if(d_day>=0)
                                     listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
 
-                                if(count_i==totalLectureNum)
-                                {
-                                    listview_adapter.sort_hashMap();
-                                }
                             }
-                            //listview_adapter.sort_hashMap();
-                            listview_adapter.notifyDataSetChanged();
+                            if(count_i==totalLectureNum)
+                            {
+                                System.out.println("count_i 뭐냐");
+                                listview_adapter.sort_hashMap();
+                                listview_adapter.notifyDataSetChanged();
+                            }
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error){}
