@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
     private ArrayList<ListViewItem> listViewItemList = new ArrayList<ListViewItem>() ;
-    private HashMap<ListViewItem, Long> hash_listView = new HashMap<ListViewItem, Long>();
+    private LinkedHashMap<ListViewItem, Long> hash_listView = new LinkedHashMap<ListViewItem, Long>();
 
     // ListViewAdapter의 생성자
     public ListViewAdapter() {
@@ -30,15 +31,18 @@ public class ListViewAdapter extends BaseAdapter {
 
     public void sort_hashMap(){
         Log.e("sort 함수 진입","성공");
-        // Map.Entry 리스트 작성
+        //해쉬맵 정렬
+
         List keySetList = new ArrayList<>(hash_listView.keySet());
 
+        // 오름차순
         System.out.println("------value 오름차순------");
         Collections.sort(keySetList, (o1, o2) -> (hash_listView.get(o1).compareTo(hash_listView.get(o2))));
 
-        for(ListViewItem key : hash_listView.keySet()) {
+        for(Object key : keySetList) {
             System.out.println("key : " + key + " / " + "value : " + hash_listView.get(key));
-            listViewItemList.add(key);
+            ListViewItem item = (ListViewItem) key;
+            listViewItemList.add(item);
         }
 
         /*
