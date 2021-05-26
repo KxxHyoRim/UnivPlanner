@@ -61,21 +61,29 @@ public class login extends AppCompatActivity {
         pref = getSharedPreferences("savePW",MODE_PRIVATE);
         String savePWdata = pref.getString("pw","");
 
+        pref = getSharedPreferences("isIdSaved",MODE_PRIVATE);
+        String isIdSaved = pref.getString("isSaved","");
+
+        pref = getSharedPreferences("isPWSaved",MODE_PRIVATE);
+        String isPWSaved = pref.getString("isSaved","");
+
         checkBoxID.setChecked(false);
         checkBoxPW.setChecked(false);
 
-        if (!saveIDdata.equals("")) {
-            idEditText.setText(saveIDdata);
-            checkBoxID.setChecked(true);
-        }
-
-        if (!savePWdata.equals("")) {
-            pwEditText.setText(savePWdata);
-            checkBoxPW.setChecked(true);
-        }
-
         isIDcheckBoxChecked = false;
         isPWcheckBoxChecked = false;
+
+        if (isIdSaved.equals("true")) {
+            idEditText.setText(saveIDdata);
+            checkBoxID.setChecked(true);
+            isIDcheckBoxChecked = true;
+        }
+
+        if (isPWSaved.equals("true")) {
+            pwEditText.setText(savePWdata);
+            checkBoxPW.setChecked(true);
+            isPWcheckBoxChecked = true;
+        }
 
         checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -135,36 +143,25 @@ public class login extends AppCompatActivity {
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
 
-                    if (checkBoxID.isChecked()) {
-                        SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
-                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
-                        editorID.putString("id", idText);
-                        editorID.apply();
-                        Log.e("checkBox", "ID");
-                        Log.e("SharedPreferences", "ID put");
+                    SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
+                    editorID.putString("id", idText);
+                    editorID.apply();
 
-                        if (checkBoxPW.isChecked()) {
-                            SharedPreferences prefPW = getSharedPreferences("savePW", MODE_PRIVATE);
-                            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorPW = prefPW.edit();
-                            editorPW.putString("pw", pwText);
-                            editorPW.apply();
-                        }
+                    SharedPreferences prefPW = getSharedPreferences("savePW", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorPW = prefPW.edit();
+                    editorPW.putString("pw", pwText);
+                    editorPW.apply();
 
-                        else {
-                            SharedPreferences prefPW = getSharedPreferences("savePW", MODE_PRIVATE);
-                            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorPW = prefPW.edit();
-                            editorPW.putString("pw", "");
-                            editorPW.apply();
-                        }
-                    }
+                    SharedPreferences prefIsIDSaved = getSharedPreferences("isIdSaved", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorIsID = prefIsIDSaved.edit();
+                    editorIsID.putString("isSaved", Boolean.toString(isIDcheckBoxChecked));
+                    editorIsID.apply();
 
-                    else {
-                        SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
-                        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
-                        editorID.putString("id", "");
-                        editorID.apply();
-                    }
-
+                    SharedPreferences prefIsPWSaved = getSharedPreferences("isPWSaved", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorIsPW = prefIsPWSaved.edit();
+                    editorIsPW.putString("isSaved", Boolean.toString(isPWcheckBoxChecked));
+                    editorIsPW.apply();
 
                     idEditText.setEnabled(false);
                     pwEditText.setEnabled(false);

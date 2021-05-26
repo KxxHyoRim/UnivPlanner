@@ -3,6 +3,7 @@ package edu.sungshin.univplanner;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -28,9 +29,14 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -48,6 +54,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.FormElement;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +67,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 class cal{
     public String day;
@@ -83,7 +94,6 @@ class cal{
 }
 
 public class MainActivity extends AppCompatActivity {
-
     private FirebaseDatabase myFirebaseDatabase;
     private DatabaseReference myDatabaseReference;
     private ChildEventListener myChildEventListener;
@@ -165,6 +175,12 @@ public class MainActivity extends AppCompatActivity {
     Button btn_next;
     TextView year_month;
 
+    boolean isLoginSuccess, isSychronizedDone;
+    String lectureNameList;
+    Vector<String> lectureNameVec = new Vector<String>();
+    Vector<String> lecturePercentVec = new Vector<String>();
+    Vector<String> lectureAssignmentVec = new Vector<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,6 +189,24 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main);
+
+        isSychronizedDone = true;
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e("Swipe", "!!");
+                isSychronizedDone = false;
+                Toast.makeText(MainActivity.this,
+                        "동기화를 시작합니다", Toast.LENGTH_LONG).show();
+                MainActivity.ClientThread thread = new MainActivity.ClientThread();
+                thread.start();
+            }
+        });
+
+        if (isSychronizedDone) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
         //MainCenterText = (TextView) findViewById(R.id.MainCenterText);
 
@@ -802,4 +836,199 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    protected class ClientThread extends Thread {
+        public void run() {
+            String host = "13.124.79.16";
+            int port = 8080;
+
+            try {
+                Log.e("sck", "start");
+                Socket socket = new Socket(host, port);
+                Log.e("sck", "suc");
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+                SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
+                String saveIDdata = pref.getString("id","");
+
+                pref = getSharedPreferences("savePW",MODE_PRIVATE);
+                String savePWdata = pref.getString("pw","");
+
+                out.println(saveIDdata);
+                Log.e("send", saveIDdata);
+
+                out.println(savePWdata);
+                Log.e("send", savePWdata);
+
+                String rev = in.readLine();
+                Log.e("receive", rev);
+
+                if (rev.equals("Success")) {
+                    String userName = in.readLine();	//outer Lecture number
+
+                    String totalLectureNumStr = in.readLine();	//outer Lecture number
+                    Log.e("total Lecture Num", totalLectureNumStr);
+                    int totalLectureNum = Integer.parseInt(totalLectureNumStr);
+
+                    String realTotalLectureNumStr = in.readLine();	//outer Lecture number
+                    Log.e("real total Lecture Num", realTotalLectureNumStr);
+                    int realTotalLectureNum = Integer.parseInt(realTotalLectureNumStr);
+
+                    lectureNameList = "";
+
+                    for (int i = 0; i < realTotalLectureNum; i++) {
+                        String lectureTitle = in.readLine();	// outer lecture title
+
+                        if (lectureTitle.equals("LectureDone")) {   // if 비정규과목, break
+                            break;
+                        }
+
+                        lectureNameList += (lectureTitle + "\n");
+                        lectureNameVec.add(lectureTitle);
+
+                        Log.e("outer lecture title", lectureTitle);
+
+                        String innerLectureNumStr = in.readLine();	// inner lecture number
+                        Log.e("inner lecture num: ", innerLectureNumStr);
+                        int innerLectureNum = Integer.parseInt(innerLectureNumStr);
+
+                        String innerLecturePercentStr = "";
+                        innerLecturePercentStr += (innerLectureNum + "\n");
+
+                        if (innerLectureNum > 0) {
+                            String innerLecturePeriod = in.readLine();	// inner lecture number
+                            innerLecturePercentStr += (innerLecturePeriod + "\n");
+                            Log.e("inner lecture period: ", innerLecturePeriod);
+                        }
+
+                        for (int j = 0; j < innerLectureNum; j++) {
+                            String innerLecturePer = in.readLine();	// inner lecture percentage text
+                            innerLecturePercentStr += (innerLecturePer + " ");
+                            Log.e("inner lecture percent: ", innerLecturePer);
+                        }
+
+                        String innerAssignmentStr = "";
+                        String innerAssignmentNumStr = in.readLine();	// inner lecture number
+                        Log.e("total assignment num: ", innerAssignmentNumStr);
+
+                        if (!innerAssignmentNumStr.equals("AssignmentDone")) {
+                            int innerAssignmentNum = Integer.parseInt(innerAssignmentNumStr);
+                            int realAssignNum = 0;
+
+                            for (int j = 0; j < innerAssignmentNum; j++) {
+                                String assignmentName = in.readLine();	// inner lecture percentage text
+
+                                if (assignmentName.equals("AssignmentDone")) {
+                                    break;
+                                }
+
+                                innerAssignmentStr += (assignmentName + "\n");
+                                Log.e("inner assign name:", assignmentName);
+
+                                String isAssignmentSubmitted = in.readLine();	// inner lecture percentage text
+                                innerAssignmentStr += (isAssignmentSubmitted + "\n");
+                                Log.e("inner assign submitted:", isAssignmentSubmitted);
+
+                                String assignmentPeriod = in.readLine();	// inner lecture percentage text
+                                innerAssignmentStr += (assignmentPeriod + "\n");
+                                Log.e("inner assign period:", assignmentPeriod);
+                                realAssignNum++;
+                            }
+
+                            innerAssignmentStr = realAssignNum + "\n" + innerAssignmentStr;
+                        }
+
+                        else {
+                            innerAssignmentStr += "0\n";
+                        }
+
+                        lecturePercentVec.add(innerLecturePercentStr);
+                        lectureAssignmentVec.add(innerAssignmentStr);
+                    }
+
+                    String realLectureNumStr = in.readLine();	// inner lecture number
+                    Log.e("Real Lecture Num", realLectureNumStr);
+
+                    Log.e("lectureNameVec", lectureNameVec.size() + "");
+                    Log.e("lecturePercentVec", lecturePercentVec.size() + "");
+                    Log.e("lectureAssignmentVec", lectureAssignmentVec.size() + "");
+
+                    firebaseSignUp(userName);
+                }
+            }
+
+            catch (Exception e) {
+                isLoginSuccess = false;
+
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast.makeText(MainActivity.this,
+                                "동기화를 실패했습니다", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                Log.e("sck", "fail");
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            currentUser.reload();
+        }
+    }
+
+    private void firebaseSignUp(String userName) {
+        mAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.e("firebase", "signup", task.getException());
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    assert user != null;
+                    String userInfo = user.getUid();
+                    Log.e("fb uid", userInfo);
+
+                    FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
+                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("lectureName");
+                    myRef.setValue(lectureNameVec.size() + "\n" + lectureNameList);
+
+                    for (int i = 0; i < lectureNameVec.size(); i++) {
+                        String lectureName = lectureNameVec.get(i);
+                        myRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
+                        String lecturePercent = lecturePercentVec.get(i);
+                        myRef.setValue(lecturePercent);
+                        Log.e("setFB percent", i + "");
+
+                        myRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
+                        String lectureAssignment = lectureAssignmentVec.get(i);
+                        myRef.setValue(lectureAssignment);
+                        Log.e("setFB assign", i + "");
+                    }
+
+                    Toast.makeText(MainActivity.this,
+                            "동기화에 성공했습니다", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = getIntent();
+                    finish();
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                }
+
+                else {
+                    // If sign in fails, display a message to the user.
+                    Log.e("firebase", "signupFail", task.getException());
+                }
+            }
+        });
+    }
 }

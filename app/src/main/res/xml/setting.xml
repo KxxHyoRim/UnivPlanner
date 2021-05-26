@@ -4,12 +4,6 @@
 
 
     <PreferenceScreen
-        android:title="비밀번호 변경">
-        <intent android:targetPackage="edu.sungshin.univplanner"
-            android:targetClass="edu.sungshin.univplanner.PasswordChangeActivity"/>
-    </PreferenceScreen>in
-
-    <PreferenceScreen
         android:key="optional_subject_lecture"
         android:title="표시할 강의 설정">
         <PreferenceScreen
@@ -18,7 +12,7 @@
             android:summary="선택한 과목의 강의 정보만 표시됩니다."/>
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="lecture_subject1"
             android:title="객지설" />
         <CheckBoxPreference
