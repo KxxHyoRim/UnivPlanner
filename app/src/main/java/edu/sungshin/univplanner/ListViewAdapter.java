@@ -29,8 +29,6 @@ public class ListViewAdapter extends BaseAdapter {
 
     }
 
-
-
     public void sort_hashMap(){
         Log.e("sort 함수 진입","성공");
         //해쉬맵 정렬
@@ -46,20 +44,6 @@ public class ListViewAdapter extends BaseAdapter {
             ListViewItem item = (ListViewItem) key;
             listViewItemList.add(item);
         }
-
-
-        /*
-        //해쉬맵 정렬
-        Object[] hashKey = hash_listView.keySet().toArray();
-        Arrays.sort(hashKey);
-
-        //ArrayList에 다시 정렬된 순서대로 저장
-        for (Long nKey : hash_listView.keySet())
-        {
-            Log.e("정렬된 HashMap: ", hash_listView.get(nKey).getD_day()+ "");
-            listViewItemList.add(hash_listView.get(nKey));
-        }
-        */
 
     }
 

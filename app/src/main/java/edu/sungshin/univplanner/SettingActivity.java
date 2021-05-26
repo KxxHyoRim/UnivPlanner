@@ -99,7 +99,7 @@ public class SettingActivity extends AppCompatActivity {
             Bitmap bm = BitmapFactory.decodeFile(imgpath);
             imageView.setImageBitmap(bm);   // 내부 저장소에 저장된 이미지를 이미지뷰에 셋
             if(bm == null)
-                imageView.setImageResource(R.drawable.profileimage);
+                imageView.setImageResource(R.drawable.profile);
         } catch (Exception e) {
         }
 
@@ -122,7 +122,7 @@ public class SettingActivity extends AppCompatActivity {
                                         }
                                     } catch (Exception e) {
                                     }
-                                    imageView.setImageResource(R.drawable.profileimage);
+                                    imageView.setImageResource(R.drawable.profile);
                                 }
                                 else if(which==1){
                                     Intent intent = new Intent();
