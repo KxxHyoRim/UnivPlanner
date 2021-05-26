@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -33,6 +34,7 @@ import com.google.firebase.database.annotations.NotNull;
 public class Setting extends PreferenceFragment {
 
     SharedPreferences prefs;
+
 
     //데이터베이스 값 가져오기
     private FirebaseDatabase myFirebaseDatabase;
@@ -76,6 +78,13 @@ public class Setting extends PreferenceFragment {
 
         DatabaseReference myRef = database.getReference("User").
                 child(userInfo).child("lectureName");
+
+        DatabaseReference myRef_lecture = database.getReference("User").
+                child(userInfo).child("boolLecture");
+
+        DatabaseReference myRef_assignment = database.getReference("User").
+                child(userInfo).child("boolAssignment");
+
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -128,6 +137,23 @@ public class Setting extends PreferenceFragment {
                     rootPreference.removePreference(subjPreference);
 
                 }
+
+//                for(int i=1; i<totalLectureNum+1;i++){
+//
+//                    // 강의
+//                    lecture_key = lecture_base_key + i;
+//                    subjPreference = (CheckBoxPreference)findPreference(lecture_key);
+//                    subjPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                        @Override
+//                        public boolean onPreferenceClick(Preference preference) {
+//                            Boolean newValue = preference.getSharedPreferences().getBoolean(lecture_key, false);
+//
+//                            Log.e("newValue "  , lecture_key + " : " + newValue);
+//                            return false;
+//                        }
+//                    });
+//
+//                }
 
 
             }

@@ -229,21 +229,20 @@ public class MainActivity extends AppCompatActivity {
                 {
 
                     case R.id.lecture:
-                        Toast.makeText(getApplicationContext(), "강의 수강도 클릭", Toast.LENGTH_SHORT).show();
+                        Intent intent0 = new Intent(getApplicationContext(), check_lecture_Activity.class);
+                        startActivity(intent0);
                         break;
                     case R.id.assignment:
-                        Toast.makeText(getApplicationContext(), "과제 확인 클릭", Toast.LENGTH_SHORT).show();
+                        Intent intent3 = new Intent(getApplicationContext(), check_lecture_Activity.class);
+                        startActivity(intent3);
                         break;
                     case R.id.my_todo:
-                        Toast.makeText(getApplicationContext(), "나의 일정 클릭", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.setting:
-                        Toast.makeText(getApplicationContext(), "환경 설정 클릭", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                         startActivity(intent);
                         break;
                     case R.id.logout:
-                        Toast.makeText(getApplicationContext(), "로그아웃 클릭", Toast.LENGTH_SHORT).show();
                         Intent intent2 = new Intent(getApplicationContext(), login.class);
                         startActivity(intent2);
                         finish();
@@ -499,11 +498,14 @@ public class MainActivity extends AppCompatActivity {
                         dlg.setView(dialog_view);
                         Dialog dialog = dlg.create();
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                         lp.copyFrom(dialog.getWindow().getAttributes());
                         lp.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
                         lp.dimAmount = 0.5f;
                         Window window = dialog.getWindow();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
                         dialog.show();
                         int x = (int)(size.x * 0.8f);
                         int y = (int)(size.y * 0.49f);

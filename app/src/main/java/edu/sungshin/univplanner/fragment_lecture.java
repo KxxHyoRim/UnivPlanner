@@ -1,5 +1,6 @@
 package edu.sungshin.univplanner;
 
+import android.content.SharedPreferences;
 import android.graphics.Camera;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,6 +8,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.preference.CheckBoxPreference;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,13 +33,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.function.Predicate;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link fragment_lecture#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_lecture extends Fragment {
+public class fragment_lecture extends Fragment  {
 
     //데이터베이스 값 가져오기
     private FirebaseDatabase myFirebaseDatabase;
@@ -53,6 +58,18 @@ public class fragment_lecture extends Fragment {
     int percentage_sum=0;
     String isDone;
     TextView is_done_text;
+
+
+    // PreferenceScreen 값 가져오기 (설정 -과목 - 체크박스)
+    SharedPreferences prefs;
+    PreferenceScreen rootPreference;
+    CheckBoxPreference subjPreference;
+    PreferenceScreen lectureListScreen;
+    String assignment_key;
+    String lecture_key;
+    Boolean[] lecture_checked = {true};
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,6 +102,7 @@ public class fragment_lecture extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +111,85 @@ public class fragment_lecture extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        String lecture_base_key = "lecture_subject";
+        String assignment_base_key = "assignment_subject";
+
+        //로그인한 유저의 정보 가져오기
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userInfo = user.getUid();
+        Log.e("fb uid in setting", userInfo);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance(
+                "https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        DatabaseReference myRef = database.getReference("User").
+                child(userInfo).child("lectureName");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                lecture_fullList = snapshot.getValue(String.class);
+                // 수강하는 과목 개수 가져오기
+                lectureName_array = lecture_fullList.split("\n");
+                totalLectureNum = Integer.parseInt(lectureName_array[0]);
+                Log.e("hyo_total_lecture_num", totalLectureNum + "");
+
+                lecture_checked = new Boolean[totalLectureNum+1];
+//                for(int i=1; i<totalLectureNum+1;i++){
+//                    lecture_checked[i] = true;
+//                }
+
+                prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+                        Log.d("tag","클릭된 Preference의 key는 "+key);
+                        char idx =  key.charAt(key.length()-1);
+                        int index = idx-'0';
+                        Log.d("tag","key 의 마지막 자리 "+index);
+                        boolean checked = sp.getBoolean(key, true);
+                        Log.d("tag","bool Check "+ checked + " " );
+
+                        lecture_checked[index] = checked;
+
+                        for(int i=1; i<totalLectureNum+1;i++){
+                            String lecture_key = lecture_base_key + i;
+                            lecture_checked[i] = sp.getBoolean(lecture_key, true);
+                            Log.d("tag_checked", lecture_checked[i] +" at " + i);
+                        }
+                    }
+                });
+
+
+//                // 수강과목 과목명 가져오기
+//                for(int i=1; i<totalLectureNum+1;i++){
+//
+//
+//                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+//        totalLectureNum = Integer.parseInt(lectureName_array[0]);
+//        Log.e("Check totalLectureNum", totalLectureNum + "");
+
     }
+
+
+    SharedPreferences.OnSharedPreferenceChangeListener prefListener1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        }
+    };
+
+
+
 
     //디데이 구하는 함수
     public static long Dday(String mday){

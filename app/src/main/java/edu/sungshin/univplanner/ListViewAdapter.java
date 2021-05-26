@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,18 +29,24 @@ public class ListViewAdapter extends BaseAdapter {
 
     }
 
+
+
     public void sort_hashMap(){
         Log.e("sort 함수 진입","성공");
-        // Map.Entry 리스트 작성
+        //해쉬맵 정렬
+
         List keySetList = new ArrayList<>(hash_listView.keySet());
 
+        // 오름차순
         System.out.println("------value 오름차순------");
         Collections.sort(keySetList, (o1, o2) -> (hash_listView.get(o1).compareTo(hash_listView.get(o2))));
 
-        for(ListViewItem key : hash_listView.keySet()) {
+        for(Object key : keySetList) {
             System.out.println("key : " + key + " / " + "value : " + hash_listView.get(key));
-            listViewItemList.add(key);
+            ListViewItem item = (ListViewItem) key;
+            listViewItemList.add(item);
         }
+
 
         /*
         //해쉬맵 정렬
