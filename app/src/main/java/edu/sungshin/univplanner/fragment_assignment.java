@@ -142,7 +142,6 @@ public class fragment_assignment extends Fragment {
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("과제 total_lecture_num", totalLectureNum + "");
 
-                Log.e("for문 들어갈꺼야", totalLectureNum + "");
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
                     int count_i=i;
@@ -174,7 +173,6 @@ public class fragment_assignment extends Fragment {
                             }
                             if(count_i==totalLectureNum)
                             {
-                                System.out.println("count_i 뭐냐");
                                 listview_adapter.sort_hashMap();
                                 listview_adapter.notifyDataSetChanged();
                             }

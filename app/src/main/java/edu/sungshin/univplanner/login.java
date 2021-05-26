@@ -2,6 +2,8 @@ package edu.sungshin.univplanner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -405,4 +407,8 @@ public class login extends AppCompatActivity {
             }
         });
     }
-}
+    @Override
+    public void onBackPressed() {
+            finish();
+        }
+    }
