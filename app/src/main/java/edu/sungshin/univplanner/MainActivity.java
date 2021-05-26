@@ -29,6 +29,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
@@ -874,6 +875,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("real total Lecture Num", realTotalLectureNumStr);
                     int realTotalLectureNum = Integer.parseInt(realTotalLectureNumStr);
 
+                    lectureNameList = "";
+
                     for (int i = 0; i < realTotalLectureNum; i++) {
                         String lectureTitle = in.readLine();	// outer lecture title
 
@@ -1014,7 +1017,11 @@ public class MainActivity extends AppCompatActivity {
 
                     Toast.makeText(MainActivity.this,
                             "동기화에 성공했습니다.", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = getIntent();
                     finish();
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
                 }
 
                 else {
