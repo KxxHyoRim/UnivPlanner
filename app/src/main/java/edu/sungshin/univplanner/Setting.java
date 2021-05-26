@@ -137,25 +137,6 @@ public class Setting extends PreferenceFragment {
                     rootPreference.removePreference(subjPreference);
 
                 }
-
-//                for(int i=1; i<totalLectureNum+1;i++){
-//
-//                    // 강의
-//                    lecture_key = lecture_base_key + i;
-//                    subjPreference = (CheckBoxPreference)findPreference(lecture_key);
-//                    subjPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                        @Override
-//                        public boolean onPreferenceClick(Preference preference) {
-//                            Boolean newValue = preference.getSharedPreferences().getBoolean(lecture_key, false);
-//
-//                            Log.e("newValue "  , lecture_key + " : " + newValue);
-//                            return false;
-//                        }
-//                    });
-//
-//                }
-
-
             }
 
             @Override
