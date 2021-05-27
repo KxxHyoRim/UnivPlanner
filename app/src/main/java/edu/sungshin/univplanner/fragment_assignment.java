@@ -133,8 +133,8 @@ public class fragment_assignment extends Fragment {
                         assignment_checked[index] = checked;
 
                         for(int i=1; i<totalLectureNum+1;i++){
-                            String lecture_key = assignment_base_key + i;
-                            assignment_checked[i] = sp.getBoolean(lecture_key, true);
+                            String assignment_key = assignment_base_key + i;
+                            assignment_checked[i] = sp.getBoolean(assignment_key, true);
                             Log.d("tag_checked", assignment_checked[i] +" at " + i);
                         }
                     }
@@ -154,10 +154,6 @@ public class fragment_assignment extends Fragment {
 
             }
         });
-
-
-
-
     }
     //디데이 구하는 함수
     public static long Dday(String mday){
@@ -229,7 +225,6 @@ public class fragment_assignment extends Fragment {
                     String lectureName = lectureName_array[i];
                     int count_i = i;
 
-                    if (assignment_checked[i]) {
                         DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
                         percentageRef.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -252,14 +247,14 @@ public class fragment_assignment extends Fragment {
                                     String deadline_Date = assignment_deadline.substring(0, 10);
                                     long d_day = Dday(deadline_Date);  //디데이 구하기
 
-                                    if (d_day >= 0)
+                                    if (d_day >= 0 && assignment_checked[count_i])
                                         listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
 
                                 }
                                 if (count_i == totalLectureNum) {
                                     listview_adapter.sort_hashMap();
-                                    listview_adapter.notifyDataSetChanged();
                                 }
+                                listview_adapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -267,7 +262,6 @@ public class fragment_assignment extends Fragment {
                             }
                         });
                     }
-                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error){}

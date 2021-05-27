@@ -239,9 +239,9 @@ public class fragment_lecture extends Fragment  {
 
                 for (int i = 1 ; i< totalLectureNum + 1 ; i++){
                     String getDfaultKey = lecture_base_key + i;
-                    Log.d("tag", "getDfaultKey :  " +getDfaultKey );
+                    Log.d("tag", "getDefaultKey :  " +getDfaultKey );
                     lecture_checked[i] = prefs.getBoolean(getDfaultKey, true);
-                    Log.d("tag", "getDfaultBool " +lecture_checked[i] );
+                    Log.d("tag", "getDefaultBool " +lecture_checked[i] );
                 }
 
                 int percentage_average;
@@ -249,7 +249,6 @@ public class fragment_lecture extends Fragment  {
                 for(int i=1; i<totalLectureNum+1;i++) {
                     String lectureName = lectureName_array[i];
                     int count_i = i;
-                    if (lecture_checked[i]) {
                         DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
                         percentageRef.addValueEventListener(new ValueEventListener() {
 
@@ -287,7 +286,7 @@ public class fragment_lecture extends Fragment  {
                                         isDone = "미수강";
                                     }
 
-                                    if (d_day >= 0)
+                                    if (d_day >= 0 && lecture_checked[count_i])
                                         listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average, d_day);
 
                                     if (count_i == totalLectureNum)
@@ -297,13 +296,10 @@ public class fragment_lecture extends Fragment  {
                                 listview_adapter.notifyDataSetChanged();
 
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
-
-                    }
                 }
 
             }
