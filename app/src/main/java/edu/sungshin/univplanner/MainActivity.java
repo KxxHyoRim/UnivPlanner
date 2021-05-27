@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Display;
@@ -64,6 +65,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -102,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     cal[] cals = new cal[50];
     int cal_count = 0;
+
+    Boolean[] lecture_checked = {true};
+    Boolean[] assignment_checked = {true};
+
+    ArrayList lecture_name;
 
     String lecture_fullList;
     String full_percentage;
@@ -297,6 +304,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+        String lecture_base_key = "lecture_subject";
+        String assignment_base_key = "assignment_subject";
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         assert user != null;
         String userInfo = user.getUid();
@@ -312,8 +325,18 @@ public class MainActivity extends AppCompatActivity {
                 //Log.e("load letureName:", lecture_fullList + "");
 
                 lectureName_array = lecture_fullList.split("\n");
+                lecture_name = new ArrayList<>(Arrays.asList(lectureName_array));
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("total_lecture_num", totalLectureNum + "");
+                assignment_checked = new Boolean[totalLectureNum+1];
+                lecture_checked = new Boolean[totalLectureNum+1];
+
+                for (int i = 1 ; i< totalLectureNum + 1 ; i++){
+                    String getDfaultKey = lecture_base_key + i;
+                    lecture_checked[i] = prefs.getBoolean(getDfaultKey, true);
+                    String getDfaultKey2 = assignment_base_key + i;
+                    assignment_checked[i] = prefs.getBoolean(getDfaultKey2, true);
+                }
 
                 for(int i=1; i<totalLectureNum+1;i++){
                     String lectureName = lectureName_array[i];
@@ -409,6 +432,45 @@ public class MainActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error){}
+                    });
+
+                    prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+                            Log.d("tag","클릭된 Preference의 key는 "+key);
+                            char idx =  key.charAt(key.length()-1);
+                            int index = idx-'0';
+                            Log.d("tag","key 의 마지막 자리 "+index);
+                            boolean checked = sp.getBoolean(key, true);
+                            Log.d("tag","bool Check "+ checked + " " );
+
+                            assignment_checked[index] = checked;
+
+                            for(int i=1; i<totalLectureNum+1;i++){
+                                String lecture_key = assignment_base_key + i;
+                                assignment_checked[i] = sp.getBoolean(lecture_key, true);
+                                Log.d("tag_checked", assignment_checked[i] +" at " + i);
+                            }
+                        }
+                    });
+
+
+                    prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                        public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+                            Log.d("tag","클릭된 Preference의 key는 "+key);
+                            char idx =  key.charAt(key.length()-1);
+                            int index = idx-'0';
+                            Log.d("tag","key 의 마지막 자리 "+index);
+                            boolean checked = sp.getBoolean(key, true);
+                            Log.d("tag","bool Check "+ checked + " " );
+
+                            lecture_checked[index] = checked;
+
+                            for(int i=1; i<totalLectureNum+1;i++){
+                                String lecture_key = lecture_base_key + i;
+                                lecture_checked[i] = sp.getBoolean(lecture_key, true);
+                                Log.d("tag_checked", lecture_checked[i] +" at " + i);
+                            }
+                        }
                     });
                 }
 
@@ -565,6 +627,10 @@ public class MainActivity extends AppCompatActivity {
                         for(int j=0;j<cal_count;j++){
                             final int index2;
                             index2 = j;
+                            if((cals[index2].ass_or_lec == 1) && (lecture_checked[lecture_name.indexOf(cals[index2].name)] == false))
+                                continue;
+                            if((cals[index2].ass_or_lec == 0) && (assignment_checked[lecture_name.indexOf(cals[index2].name)] == false))
+                                continue;
                             if(cals[index2].check_ymd(year, month, day_s)){
                                 TextView name = (TextView) dialog_view.findViewById(nameid[sche_count]);
                                 TextView isDone = (TextView) dialog_view.findViewById(isDoneid[sche_count]);
@@ -803,7 +869,13 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<cal_count;i++){
             final int index;
             index = i;
+
             int index2 = Integer.parseInt(cals[index].day) + start_day - 2;
+            if((cals[index].ass_or_lec == 1) && (lecture_checked[lecture_name.indexOf(cals[index].name)] == false))
+                continue;
+            if((cals[index].ass_or_lec == 0) && (assignment_checked[lecture_name.indexOf(cals[index].name)] == false))
+                continue;
+
             if(cals[index].check_ym(year, month)){
                 day[index2].setBackgroundResource(R.drawable.click);
                 clickable[index2] = true;
