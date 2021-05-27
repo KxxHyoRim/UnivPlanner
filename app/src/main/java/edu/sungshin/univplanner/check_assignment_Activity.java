@@ -304,6 +304,8 @@ public class check_assignment_Activity extends AppCompatActivity {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
             finish();
         }
     }
