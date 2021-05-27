@@ -161,13 +161,6 @@ public class fragment_lecture extends Fragment  {
                     }
                 });
 
-
-//                // 수강과목 과목명 가져오기
-//                for(int i=1; i<totalLectureNum+1;i++){
-//
-//
-//                }
-
             }
 
             @Override
@@ -187,9 +180,6 @@ public class fragment_lecture extends Fragment  {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         }
     };
-
-
-
 
     //디데이 구하는 함수
     public static long Dday(String mday){
@@ -250,63 +240,64 @@ public class fragment_lecture extends Fragment  {
                 Log.e("total_lecture_num", totalLectureNum + "");
                 int percentage_average;
 
-                for(int i=1; i<totalLectureNum+1;i++){
+                for(int i=1; i<totalLectureNum+1;i++) {
                     String lectureName = lectureName_array[i];
-                    int count_i=i;
-                    DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
-                    percentageRef.addValueEventListener(new ValueEventListener() {
+                    int count_i = i;
+                    if (lecture_checked[i]) {
+                        DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("percentage");
+                        percentageRef.addValueEventListener(new ValueEventListener() {
 
-                        @Override
-                        public void onDataChange(@NotNull DataSnapshot snapshot){
-                            full_percentage = snapshot.getValue(String.class);
-                            Log.e("lecture Name", lectureName);
+                            @Override
+                            public void onDataChange(@NotNull DataSnapshot snapshot) {
+                                full_percentage = snapshot.getValue(String.class);
+                                Log.e("lecture Name", lectureName);
 
-                            percentage_array = full_percentage.split("\n");
-                            int percentage_num = Integer.parseInt(percentage_array[0]);
-                            Log.e("percentage_num", percentage_num + "");
+                                percentage_array = full_percentage.split("\n");
+                                int percentage_num = Integer.parseInt(percentage_array[0]);
+                                Log.e("percentage_num", percentage_num + "");
 
-                            if (percentage_num!=0) {
-                                String lecture_deadline = percentage_array[1].substring(9,percentage_array[1].length());
-                                Log.e("lecture_deadline", lecture_deadline + "");
+                                if (percentage_num != 0) {
+                                    String lecture_deadline = percentage_array[1].substring(9, percentage_array[1].length());
+                                    Log.e("lecture_deadline", lecture_deadline + "");
 
-                                String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~")+2,lecture_deadline.lastIndexOf("~")+13);
-                                long d_day = Dday(deadline_Date);  //디데이 구하기
-                                Log.e("강의 수강 퍼센트", percentage_array[2] + "");
-                                //수강도 (퍼센트 구하기)
-                                for(int j=0; j<percentage_num; j++){
-                                    percentage_sum += Integer.parseInt(percentage_array[2].substring(0,percentage_array[2].indexOf("%")));
-                                    percentage_array[2] = percentage_array[2].substring(percentage_array[2].indexOf("%")+2,percentage_array[2].length());
+                                    String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~") + 2, lecture_deadline.lastIndexOf("~") + 13);
+                                    long d_day = Dday(deadline_Date);  //디데이 구하기
+                                    Log.e("강의 수강 퍼센트", percentage_array[2] + "");
+                                    //수강도 (퍼센트 구하기)
+                                    for (int j = 0; j < percentage_num; j++) {
+                                        percentage_sum += Integer.parseInt(percentage_array[2].substring(0, percentage_array[2].indexOf("%")));
+                                        percentage_array[2] = percentage_array[2].substring(percentage_array[2].indexOf("%") + 2, percentage_array[2].length());
+                                    }
+
+                                    int percentage_average = percentage_sum / percentage_num;
+                                    myprogress_bar.setIndeterminate(false);
+                                    myprogress_bar.setProgress(percentage_average);
+
+                                    Log.e("수강도", percentage_average + "%");
+
+                                    if (percentage_average == 100) {
+                                        isDone = "수강완료";
+                                    } else {
+                                        isDone = "미수강";
+                                    }
+
+                                    if (d_day >= 0)
+                                        listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average, d_day);
+
+                                    if (count_i == totalLectureNum)
+                                        listview_adapter.sort_hashMap();
+                                    percentage_sum = 0; // 다시 초기화
                                 }
+                                listview_adapter.notifyDataSetChanged();
 
-                                int percentage_average = percentage_sum/percentage_num;
-                                myprogress_bar.setIndeterminate(false);
-                                myprogress_bar.setProgress(percentage_average);
-
-                                Log.e("수강도", percentage_average + "%");
-
-                                if(percentage_average==100)
-                                {
-                                    isDone = "수강완료";
-                                }
-                                else
-                                {
-                                    isDone = "미수강";
-                                }
-
-                                if(d_day>=0)
-                                    listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average, d_day);
-
-                                if(count_i==totalLectureNum)
-                                    listview_adapter.sort_hashMap();
-                                percentage_sum =0; // 다시 초기화
                             }
-                            listview_adapter.notifyDataSetChanged();
 
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error){}
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
 
+                    }
                 }
 
             }
