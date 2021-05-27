@@ -49,6 +49,9 @@ public class login extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     private Toast toast;
 
+    /*************  Only For Test, Erase  ************/
+    Button passButton;
+    /*************  Only For Test, Erase  ************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,10 @@ public class login extends AppCompatActivity {
         pwEditText = (EditText) findViewById(R.id.login_pw);
         checkBoxID = (CheckBox) findViewById(R.id.login_checkbox_id);
         checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
+
+        /*************  Only For Test, Erase  ************/
+        passButton = (Button) findViewById(R.id.login_passBtn);
+        /*************  Only For Test, Erase  ************/
 
         SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
         String saveIDdata = pref.getString("id","");
@@ -169,6 +176,30 @@ public class login extends AppCompatActivity {
                     editorIsPW.putString("isSaved", Boolean.toString(isPWcheckBoxChecked));
                     editorIsPW.apply();
 
+                    checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isIDcheckBoxChecked) {
+                                checkBoxID.setChecked(true);
+                            }
+
+                            else {
+                                checkBoxID.setChecked(false);
+                            }
+                        }
+                    });
+
+                    checkBoxPW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isPWcheckBoxChecked) {
+                                checkBoxPW.setChecked(true);
+                            }
+
+                            else {
+                                checkBoxPW.setChecked(false);
+                            }
+                        }
+                    });
+
                     idEditText.setEnabled(false);
                     pwEditText.setEnabled(false);
                     button.setText("로그인 정보 확인중 ..");
@@ -179,6 +210,16 @@ public class login extends AppCompatActivity {
                 }
             }
         });
+
+        /*************  Only For Test, Erase  ************/
+        passButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        /*************  Only For Test, Erase  ************/
     }
 
     protected class ClientThread extends Thread {
@@ -399,7 +440,6 @@ public class login extends AppCompatActivity {
                             userName + "님, 반갑습니다.", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    intent.putExtra("crawlingText", "Have to Get Firebase DB");
                     startActivity(intent);
                     finish();
                 }

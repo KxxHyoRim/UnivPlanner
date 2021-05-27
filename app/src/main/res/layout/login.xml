@@ -10,6 +10,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/login_passBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pass" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,6 +101,7 @@
                     android:fontFamily="@font/nanum_squre_regular"
                     android:text="비밀번호 저장"
                     android:textSize="13dp" />
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -111,6 +119,7 @@
                     android:layout_marginTop="50dp"
                     android:text="아이디저장 및 자동 로그인은 공개된 장소의\n단말기에서는 사용을 권하지 않습니다." />
             </LinearLayout>
+
         </LinearLayout>
 
     </RelativeLayout>
