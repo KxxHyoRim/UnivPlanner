@@ -49,9 +49,10 @@ public class fragment_assignment extends Fragment {
     String[] lectureName_array;
     String[] assignment_array;
     TextView isDone_textView;
-
     Boolean[] assignment_checked = {true};
 
+    String lecture_base_key = "lecture_subject";
+    String assignment_base_key = "assignment_subject";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -91,13 +92,9 @@ public class fragment_assignment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
         SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        String lecture_base_key = "lecture_subject";
-        String assignment_base_key = "assignment_subject";
 
         //로그인한 유저의 정보 가져오기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -184,6 +181,9 @@ public class fragment_assignment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_assignment, container, false);
         View listItem = inflater.inflate(R.layout.listview_item_assingment, container, false);
@@ -217,44 +217,56 @@ public class fragment_assignment extends Fragment {
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("과제 total_lecture_num", totalLectureNum + "");
 
-                for(int i=1; i<totalLectureNum+1;i++){
+
+                for (int i = 1 ; i< totalLectureNum + 1 ; i++){
+                    String getDfaultKey = assignment_base_key + i;
+                    Log.d("tag", "getDfaultKey :  " +getDfaultKey );
+                    assignment_checked[i] = prefs.getBoolean(getDfaultKey, true);
+                    Log.d("tag", "getDfaultBool " +assignment_checked[i] );
+                }
+
+                for(int i=1; i<totalLectureNum+1;i++) {
                     String lectureName = lectureName_array[i];
-                    int count_i=i;
-                    DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
-                    percentageRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NotNull DataSnapshot snapshot){
-                            full_assignment = snapshot.getValue(String.class);
-                            Log.e("lecture Name "+ count_i, lectureName);
+                    int count_i = i;
 
-                            assignment_array = full_assignment.split("\n");
-                            int assignment_num = Integer.parseInt(assignment_array[0]);
-                            Log.e("assignment_num"+ count_i, assignment_num + "");
+                    if (assignment_checked[i]) {
+                        DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
+                        percentageRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NotNull DataSnapshot snapshot) {
+                                full_assignment = snapshot.getValue(String.class);
+                                Log.e("lecture Name " + count_i, lectureName);
 
-                            if (assignment_num!=0) {
-                                String assignment_name = assignment_array[1];
-                                //Log.e("assignment_name", assignment_name + "");
+                                assignment_array = full_assignment.split("\n");
+                                int assignment_num = Integer.parseInt(assignment_array[0]);
+                                Log.e("assignment_num" + count_i, assignment_num + "");
 
-                                String isDone_assignment = assignment_array[2];
-                                //Log.e("isDone_assignment", isDone_assignment + "");
+                                if (assignment_num != 0) {
+                                    String assignment_name = assignment_array[1];
+                                    //Log.e("assignment_name", assignment_name + "");
 
-                                String assignment_deadline = assignment_array[3];
-                                String deadline_Date = assignment_deadline.substring(0, 10);
-                                long d_day = Dday(deadline_Date);  //디데이 구하기
+                                    String isDone_assignment = assignment_array[2];
+                                    //Log.e("isDone_assignment", isDone_assignment + "");
 
-                                if(d_day>=0)
-                                    listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
+                                    String assignment_deadline = assignment_array[3];
+                                    String deadline_Date = assignment_deadline.substring(0, 10);
+                                    long d_day = Dday(deadline_Date);  //디데이 구하기
 
+                                    if (d_day >= 0)
+                                        listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
+
+                                }
+                                if (count_i == totalLectureNum) {
+                                    listview_adapter.sort_hashMap();
+                                    listview_adapter.notifyDataSetChanged();
+                                }
                             }
-                            if(count_i==totalLectureNum)
-                            {
-                                listview_adapter.sort_hashMap();
-                                listview_adapter.notifyDataSetChanged();
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
                             }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error){}
-                    });
+                        });
+                    }
                 }
             }
             @Override

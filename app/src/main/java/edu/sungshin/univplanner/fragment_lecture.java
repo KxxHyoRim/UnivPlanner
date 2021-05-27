@@ -59,15 +59,10 @@ public class fragment_lecture extends Fragment  {
     String isDone;
     TextView is_done_text;
 
-
-    // PreferenceScreen 값 가져오기 (설정 -과목 - 체크박스)
-//    SharedPreferences prefs;
-//    PreferenceScreen rootPreference;
-//    CheckBoxPreference subjPreference;
-//    PreferenceScreen lectureListScreen;
-//    String assignment_key;
-//    String lecture_key;
     Boolean[] lecture_checked = {true};
+
+    String lecture_base_key = "lecture_subject";
+    String assignment_base_key = "assignment_subject";
 
 
 
@@ -113,9 +108,6 @@ public class fragment_lecture extends Fragment  {
 
         SharedPreferences prefs;
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        String lecture_base_key = "lecture_subject";
-        String assignment_base_key = "assignment_subject";
 
         //로그인한 유저의 정보 가져오기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -205,6 +197,11 @@ public class fragment_lecture extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_lecture, container, false);
         View listItem = inflater.inflate(R.layout.listview_item, container, false);
@@ -238,6 +235,15 @@ public class fragment_lecture extends Fragment  {
                 lectureName_array = lecture_fullList.split("\n");
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
                 Log.e("total_lecture_num", totalLectureNum + "");
+
+
+                for (int i = 1 ; i< totalLectureNum + 1 ; i++){
+                    String getDfaultKey = lecture_base_key + i;
+                    Log.d("tag", "getDfaultKey :  " +getDfaultKey );
+                    lecture_checked[i] = prefs.getBoolean(getDfaultKey, true);
+                    Log.d("tag", "getDfaultBool " +lecture_checked[i] );
+                }
+
                 int percentage_average;
 
                 for(int i=1; i<totalLectureNum+1;i++) {
