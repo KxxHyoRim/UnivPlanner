@@ -1,11 +1,13 @@
 package edu.sungshin.univplanner;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +50,9 @@ public class fragment_assignment extends Fragment {
     String[] assignment_array;
     TextView isDone_textView;
 
+    Boolean[] assignment_checked = {true};
+
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -86,6 +91,76 @@ public class fragment_assignment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        SharedPreferences prefs;
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        String lecture_base_key = "lecture_subject";
+        String assignment_base_key = "assignment_subject";
+
+        //로그인한 유저의 정보 가져오기
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userInfo = user.getUid();
+        Log.e("fb uid in setting", userInfo);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance(
+                "https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        DatabaseReference myRef = database.getReference("User").
+                child(userInfo).child("lectureName");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                lecture_fullList = snapshot.getValue(String.class);
+                // 수강하는 과목 개수 가져오기
+                lectureName_array = lecture_fullList.split("\n");
+                totalLectureNum = Integer.parseInt(lectureName_array[0]);
+                Log.e("hyo_total_lecture_num", totalLectureNum + "");
+
+                assignment_checked = new Boolean[totalLectureNum+1];
+//                for(int i=1; i<totalLectureNum+1;i++){
+//                    lecture_checked[i] = true;
+//                }
+
+                prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+                        Log.d("tag","클릭된 Preference의 key는 "+key);
+                        char idx =  key.charAt(key.length()-1);
+                        int index = idx-'0';
+                        Log.d("tag","key 의 마지막 자리 "+index);
+                        boolean checked = sp.getBoolean(key, true);
+                        Log.d("tag","bool Check "+ checked + " " );
+
+                        assignment_checked[index] = checked;
+
+                        for(int i=1; i<totalLectureNum+1;i++){
+                            String lecture_key = assignment_base_key + i;
+                            assignment_checked[i] = sp.getBoolean(lecture_key, true);
+                            Log.d("tag_checked", assignment_checked[i] +" at " + i);
+                        }
+                    }
+                });
+
+
+//                // 수강과목 과목명 가져오기
+//                for(int i=1; i<totalLectureNum+1;i++){
+//
+//
+//                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
     }
     //디데이 구하는 함수
     public static long Dday(String mday){

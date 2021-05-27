@@ -61,12 +61,12 @@ public class fragment_lecture extends Fragment  {
 
 
     // PreferenceScreen 값 가져오기 (설정 -과목 - 체크박스)
-    SharedPreferences prefs;
-    PreferenceScreen rootPreference;
-    CheckBoxPreference subjPreference;
-    PreferenceScreen lectureListScreen;
-    String assignment_key;
-    String lecture_key;
+//    SharedPreferences prefs;
+//    PreferenceScreen rootPreference;
+//    CheckBoxPreference subjPreference;
+//    PreferenceScreen lectureListScreen;
+//    String assignment_key;
+//    String lecture_key;
     Boolean[] lecture_checked = {true};
 
 
