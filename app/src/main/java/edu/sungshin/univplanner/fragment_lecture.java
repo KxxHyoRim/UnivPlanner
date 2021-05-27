@@ -106,8 +106,8 @@ public class fragment_lecture extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences prefs2;
+        prefs2 = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //로그인한 유저의 정보 가져오기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -134,7 +134,7 @@ public class fragment_lecture extends Fragment  {
 //                    lecture_checked[i] = true;
 //                }
 
-                prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                prefs2.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                         Log.d("tag","클릭된 Preference의 key는 "+key);
                         char idx =  key.charAt(key.length()-1);

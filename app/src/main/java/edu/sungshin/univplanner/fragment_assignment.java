@@ -135,7 +135,7 @@ public class fragment_assignment extends Fragment {
                         for(int i=1; i<totalLectureNum+1;i++){
                             String assignment_key = assignment_base_key + i;
                             assignment_checked[i] = sp.getBoolean(assignment_key, true);
-                            Log.d("tag_checked", assignment_checked[i] +" at " + i);
+                            Log.d("a :: tag_checked", assignment_checked[i] +" at " + i);
                         }
                     }
                 });
@@ -154,6 +154,10 @@ public class fragment_assignment extends Fragment {
 
             }
         });
+
+
+
+
     }
     //디데이 구하는 함수
     public static long Dday(String mday){
