@@ -111,8 +111,8 @@ public class fragment_lecture extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        SharedPreferences prefs;
-        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences prefs2;
+        prefs2 = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         String lecture_base_key = "lecture_subject";
         String assignment_base_key = "assignment_subject";
@@ -142,7 +142,7 @@ public class fragment_lecture extends Fragment  {
 //                    lecture_checked[i] = true;
 //                }
 
-                prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+                prefs2.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                         Log.d("tag","클릭된 Preference의 key는 "+key);
                         char idx =  key.charAt(key.length()-1);
