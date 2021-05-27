@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         isSychronizedDone = true;
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-        swipeRefreshLayout.setDistanceToTriggerSync(600);
+        swipeRefreshLayout.setDistanceToTriggerSync(100);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
