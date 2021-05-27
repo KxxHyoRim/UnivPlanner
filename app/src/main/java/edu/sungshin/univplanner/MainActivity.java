@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -180,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
     Vector<String> lectureNameVec = new Vector<String>();
     Vector<String> lecturePercentVec = new Vector<String>();
     Vector<String> lectureAssignmentVec = new Vector<String>();
+
+    private long backKeyPressedTime = 0;
+    private Toast exitToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -640,14 +645,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            //super.onBackPressed();
-            finish();
+        }
+
+        else {
+            if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+                backKeyPressedTime = System.currentTimeMillis();
+                exitToast = Toast.makeText(this, "뒤로 가기 버튼을 한 번 더 누르시면 종료됩니다", Toast.LENGTH_LONG);
+                exitToast.show();
+                return;
+            }
+
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+                finish();
+                exitToast.cancel();
+
+                moveTaskToBack(true);
+                finishAndRemoveTask();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
         }
     }
 
