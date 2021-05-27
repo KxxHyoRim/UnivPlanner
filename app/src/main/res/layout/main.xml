@@ -8,15 +8,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -40,6 +31,45 @@
                 android:layout_gravity="center"
                 android:src="@drawable/logo_tmp_smallsize"/>
         </androidx.appcompat.widget.Toolbar>
+
+        <Button
+            android:id="@+id/main_syncBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_above="@+id/view_toolbar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="351dp"
+            android:layout_marginLeft="351dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            android:layout_marginBottom="9dp"
+            android:text=""
+            app:backgroundTint="#00FFFFFF" />
+
+        <ImageView
+            android:id="@+id/main_syncImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/toolbar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="357dp"
+            android:layout_marginLeft="357dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginBottom="13dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/refresh_image" />
 
         <TableLayout
             android:id="@+id/tableLayout1"
@@ -1103,10 +1133,10 @@
                 android:textColor="#000000"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"/>
+
         </androidx.viewpager.widget.ViewPager>
 
     </RelativeLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <!--navigation drawer-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
