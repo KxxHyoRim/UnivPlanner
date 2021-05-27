@@ -168,4 +168,11 @@ public class SettingActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
