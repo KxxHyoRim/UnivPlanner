@@ -169,6 +169,30 @@ public class login extends AppCompatActivity {
                     editorIsPW.putString("isSaved", Boolean.toString(isPWcheckBoxChecked));
                     editorIsPW.apply();
 
+                    checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isIDcheckBoxChecked) {
+                                checkBoxID.setChecked(true);
+                            }
+
+                            else {
+                                checkBoxID.setChecked(false);
+                            }
+                        }
+                    });
+
+                    checkBoxPW.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            if (isPWcheckBoxChecked) {
+                                checkBoxPW.setChecked(true);
+                            }
+
+                            else {
+                                checkBoxPW.setChecked(false);
+                            }
+                        }
+                    });
+
                     idEditText.setEnabled(false);
                     pwEditText.setEnabled(false);
                     button.setText("로그인 정보 확인중 ..");
