@@ -110,7 +110,8 @@ public class check_lecture_Activity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
+                switch (menuItem.getItemId())
+                {
 
                     case R.id.lecture:
                         Intent intent0 = new Intent(getApplicationContext(), check_lecture_Activity.class);
@@ -140,6 +141,17 @@ public class check_lecture_Activity extends AppCompatActivity {
                 return true;
             }
         });
-
+    }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
