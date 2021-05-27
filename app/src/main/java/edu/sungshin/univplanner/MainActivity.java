@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn_next;
     TextView year_month;
 
-    boolean isLoginSuccess, isSychronizedDone;
+    boolean isLoginSuccess, isSynchronizedDone;
     String lectureNameList;
     Vector<String> lectureNameVec = new Vector<String>();
     Vector<String> lecturePercentVec = new Vector<String>();
@@ -192,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
 
     private long backKeyPressedTime = 0;
     private Toast exitToast;
+    Button syncBtn;
+    ImageView syncImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,27 +208,6 @@ public class MainActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.main);
-
-        isSychronizedDone = true;
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeLayout);
-        swipeRefreshLayout.setDistanceToTriggerSync(100);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.e("Swipe", "!!");
-                isSychronizedDone = false;
-                Toast.makeText(MainActivity.this,
-                        "동기화를 시작합니다", Toast.LENGTH_LONG).show();
-                MainActivity.ClientThread thread = new MainActivity.ClientThread();
-                thread.start();
-            }
-        });
-
-        if (isSychronizedDone) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
-
-        //MainCenterText = (TextView) findViewById(R.id.MainCenterText);
 
         JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask();
         jsoupAsyncTask.execute();
@@ -710,6 +696,29 @@ public class MainActivity extends AppCompatActivity {
                 month(start_day);
             }
         });
+
+        isSynchronizedDone = true;
+        syncBtn = (Button) findViewById(R.id.main_syncBtn);
+        syncImage = (ImageView) findViewById(R.id.main_syncImage);
+        Animation syncAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sync_rotation_animation);
+
+        syncBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSynchronizedDone = false;
+                syncBtn.setEnabled(false);
+                syncImage.startAnimation(syncAnimation);
+                Toast.makeText(MainActivity.this,
+                        "동기화를 시작합니다", Toast.LENGTH_LONG).show();
+                MainActivity.ClientThread thread = new MainActivity.ClientThread();
+                thread.start();
+            }
+        });
+
+        if (isSynchronizedDone) {
+            syncBtn.setEnabled(true);
+            syncImage.clearAnimation();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
