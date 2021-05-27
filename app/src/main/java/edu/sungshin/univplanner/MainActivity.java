@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
         //페이지 갯수지정
         mViewPager.setOffscreenPageLimit(2);
-
         //어댑터 객체 생성
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
