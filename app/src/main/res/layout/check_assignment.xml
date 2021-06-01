@@ -20,16 +20,16 @@
             android:background="@color/light_Gray" />
 
         <androidx.appcompat.widget.Toolbar
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/assignment_univLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/logo_tmp_smallsize"/>
+                android:src="@drawable/logo_tmp_smallsize" />
         </androidx.appcompat.widget.Toolbar>
 
 
