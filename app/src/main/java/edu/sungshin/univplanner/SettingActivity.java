@@ -8,17 +8,21 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -48,10 +52,25 @@ public class SettingActivity extends AppCompatActivity {
     String name_from_firebase;
     String id_from_firebase;
 
+    TextView nav_name;
+    TextView nav_std_number;
+
+    ImageView univLogo;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        univLogo = (ImageView) findViewById(R.id.assignment_univLogo);
+        univLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
         imageView = (ImageView) findViewById(R.id.imageView);
 
         set_name = (TextView) findViewById(R.id.std_name);
@@ -137,6 +156,104 @@ public class SettingActivity extends AppCompatActivity {
                 dlg.show();
             }
         });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //App Bar의 좌측 영영에 Drawer를 Open 하기 위한 Incon 추가
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_baseline_dehaze_24);
+
+        DrawerLayout drawLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationView);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawLayout,
+                toolbar,
+                R.string.open,
+                R.string.closed
+        );
+
+
+        drawLayout.addDrawerListener(actionBarDrawerToggle);
+
+        //네비게이션 메뉴들 클릭할 때, 동작하는 이벤트
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId())
+                {
+
+                    case R.id.lecture:
+                        Intent intent0 = new Intent(getApplicationContext(), check_lecture_Activity.class);
+                        startActivity(intent0);
+                        break;
+                    case R.id.assignment:
+                        Intent intent3 = new Intent(getApplicationContext(), check_assignment_Activity.class);
+                        startActivity(intent3);
+                        break;
+                    case R.id.my_todo:
+                        Intent intent4 = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent4);
+                        break;
+                    case R.id.setting:
+                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.logout:
+                        Intent intent2 = new Intent(getApplicationContext(), login.class);
+                        startActivity(intent2);
+                        finish();
+                        break;
+                }
+
+                DrawerLayout drawer = findViewById(R.id.drawerLayout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
+        NavigationView navView= (NavigationView) findViewById(R.id.navigationView);
+        View nav_view=navView.getHeaderView(0);
+        nav_name = (TextView) nav_view.findViewById(R.id.nav_name);
+        nav_std_number = (TextView) nav_view.findViewById(R.id.nav_std_number);
+
+
+        // firebase에서 학생 이름 가져오기
+        DatabaseReference myRef4 = database.getReference("User").
+                child(userInfo).child("name");
+
+        // navigation bar에 학생 이름 설정하기
+        myRef4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                name_from_firebase =  snapshot.getValue(String.class);
+                Log.e("nav_std_name", name_from_firebase + "");
+                nav_name.setText(name_from_firebase);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {  }
+        });
+
+        // firebase에서 학생 학번(id) 가져오기
+        DatabaseReference myRef5 = database.getReference("User").
+                child(userInfo).child("id");
+
+        // navigation bar에 학생 학번 설정하기
+        myRef5.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                id_from_firebase =  snapshot.getValue(String.class);
+                Log.e("nav_std_id", id_from_firebase + "");
+                nav_std_number.setText(id_from_firebase);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -171,8 +288,14 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
