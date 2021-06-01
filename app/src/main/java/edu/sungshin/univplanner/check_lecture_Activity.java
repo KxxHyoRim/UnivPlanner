@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,9 +64,21 @@ public class check_lecture_Activity extends AppCompatActivity {
     ViewPager mViewPager;
     private ArrayList<Fragment> fList;
 
+    ImageView univLogo;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_lecture);
+
+        univLogo = (ImageView) findViewById(R.id.lecture_univLogo);
+        univLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // 스와이프할 뷰페이저를 정의
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -140,6 +153,53 @@ public class check_lecture_Activity extends AppCompatActivity {
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
+        });
+
+        NavigationView navView= (NavigationView) findViewById(R.id.navigationView);
+        View nav_view=navView.getHeaderView(0);
+        nav_name = (TextView) nav_view.findViewById(R.id.nav_name);
+        nav_std_number = (TextView) nav_view.findViewById(R.id.nav_std_number);
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        String userInfo = user.getUid();
+        Log.e("fb uid", userInfo);
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
+
+        // firebase에서 학생 이름 가져오기
+        DatabaseReference myRef2 = database.getReference("User").
+                child(userInfo).child("name");
+
+        // navigation bar에 학생 이름 설정하기
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                name_from_firebase =  snapshot.getValue(String.class);
+                Log.e("nav_std_name", name_from_firebase + "");
+                nav_name.setText(name_from_firebase);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {  }
+        });
+
+        // firebase에서 학생 학번(id) 가져오기
+        DatabaseReference myRef3 = database.getReference("User").
+                child(userInfo).child("id");
+
+        // navigation bar에 학생 학번 설정하기
+        myRef3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                id_from_firebase =  snapshot.getValue(String.class);
+                Log.e("nav_std_id", id_from_firebase + "");
+                nav_std_number.setText(id_from_firebase);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
     @Override

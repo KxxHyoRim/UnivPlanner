@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     private Toast exitToast;
     Button syncBtn;
-    ImageView syncImage;
+    ImageView syncImage, univLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
