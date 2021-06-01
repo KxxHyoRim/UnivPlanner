@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,9 +64,21 @@ public class check_lecture_Activity extends AppCompatActivity {
     ViewPager mViewPager;
     private ArrayList<Fragment> fList;
 
+    ImageView univLogo;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.check_lecture);
+
+        univLogo = (ImageView) findViewById(R.id.lecture_univLogo);
+        univLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         // 스와이프할 뷰페이저를 정의
         mViewPager = (ViewPager) findViewById(R.id.viewPager);
