@@ -48,14 +48,6 @@
             android:layout_marginTop="0dp"
             android:id="@+id/viewPager"
             >
-            <androidx.viewpager.widget.PagerTitleStrip
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/purple_200"
-                android:textColor="#000000"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"/>
         </androidx.viewpager.widget.ViewPager>
 
     </RelativeLayout>
