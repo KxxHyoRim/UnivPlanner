@@ -100,6 +100,9 @@ class cal{
     public boolean check_ymd(String year, String month, String day){
         return (this.year.equals(year) && this.month.equals(month) && this.day.equals(day));
     }
+    public boolean check_ymd(String year, String month, int day){
+        return (this.year.equals(year) && this.month.equals(month) && Integer.parseInt(this.day) == day);
+    }
 }
 
 public class MainActivity extends AppCompatActivity {
@@ -889,7 +892,9 @@ public class MainActivity extends AppCompatActivity {
                 day[index2].setBackgroundResource(R.drawable.click);
                 clickable[index2] = true;
                 sche[index2].setBackgroundResource(R.drawable.underline);
-                if(cals[index].check_ymd(today_year, today_month, Integer.toString(today_day)))
+                Log.e("-------------1", Integer.toString(today_day));
+                Log.e("-------------2", cals[index].day);
+                if(cals[index].check_ymd(today_year, today_month, today_day))
                     day[index2].setBackgroundResource(R.drawable.today_click);
             }
         }
