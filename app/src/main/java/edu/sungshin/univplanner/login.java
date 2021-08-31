@@ -206,8 +206,8 @@ public class login extends AppCompatActivity {
 
     protected class ClientThread extends Thread {
         public void run() {
-            String host = "13.124.79.16";
-            int port = 8080;
+            String host = "13.124.68.224";
+            int port = 38497;
 
             try {
                 Log.e("sck", "start");
