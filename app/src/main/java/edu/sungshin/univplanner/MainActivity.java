@@ -945,8 +945,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected class ClientThread extends Thread {
         public void run() {
-            String host = "13.124.79.16";
-            int port = 8080;
+            String host = "13.124.68.224";
+            int port = 38497;
 
             try {
                 Log.e("sck", "start");
@@ -985,6 +985,15 @@ public class MainActivity extends AppCompatActivity {
                     lectureNameList = "";
 
                     for (int i = 0; i < realTotalLectureNum; i++) {
+                        int curIdx = i + 1;
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(MainActivity.this,
+                                        "LMS 동기화 " + curIdx + "/" + realTotalLectureNum,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         String lectureTitle = in.readLine();	// outer lecture title
 
                         if (lectureTitle.equals("LectureDone")) {   // if 비정규과목, break
