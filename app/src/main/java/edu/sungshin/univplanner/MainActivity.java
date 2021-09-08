@@ -946,7 +946,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected class ClientThread extends Thread {
         public void run() {
-            String host = "13.124.68.224";
+            String host = "220.69.171.222";
             int port = 38497;
 
             try {
