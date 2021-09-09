@@ -13,10 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +37,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Vector;
 
-public class login extends AppCompatActivity {
+public class login extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button button;
     EditText idEditText, pwEditText;
     String idText, pwText;
     CheckBox checkBoxID, checkBoxPW;
+    Spinner univListSpinner;
     boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
@@ -59,6 +63,14 @@ public class login extends AppCompatActivity {
         pwEditText = (EditText) findViewById(R.id.login_pw);
         checkBoxID = (CheckBox) findViewById(R.id.login_checkbox_id);
         checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
+        univListSpinner = (Spinner) findViewById(R.id.univList);
+
+        /** 대학교 지정 */
+        String[] univListFromXML = getResources().getStringArray(R.array.univList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, univListFromXML);
+        univListSpinner.setAdapter(adapter);
+        univListSpinner.setOnItemSelectedListener(this);
+
 
         SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
         String saveIDdata = pref.getString("id","");
@@ -202,6 +214,23 @@ public class login extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                Log.e("Spinner", "first item selected");
+                break;
+            case 1:
+                Log.e("Spinner", "Second item selected");
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // do Nothing
     }
 
     protected class ClientThread extends Thread {

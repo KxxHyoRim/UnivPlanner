@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="univList">
+        <item>성신여자대학교</item>
+        <item>경북대학교</item>
+    </string-array>
+</resources>
