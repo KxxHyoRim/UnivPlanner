@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     private Toast exitToast;
     Button syncBtn;
-    ImageView syncImage, univLogo;
+    ImageView syncImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -956,17 +956,17 @@ public class MainActivity extends AppCompatActivity {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
+                SharedPreferences pref = getSharedPreferences("saveSchool",MODE_PRIVATE);
+                int schoolIdx = Integer.parseInt(pref.getString("schoolIdx",""));
+
+                pref = getSharedPreferences("saveID",MODE_PRIVATE);
                 String saveIDdata = pref.getString("id","");
 
                 pref = getSharedPreferences("savePW",MODE_PRIVATE);
                 String savePWdata = pref.getString("pw","");
 
-                out.println(saveIDdata);
-                Log.e("send", saveIDdata);
-
-                out.println(savePWdata);
-                Log.e("send", savePWdata);
+                out.println(schoolIdx + "\n" + saveIDdata + "\n" + savePWdata);
+                Log.e("send", schoolIdx + "\n" + saveIDdata + "\n" + savePWdata);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);

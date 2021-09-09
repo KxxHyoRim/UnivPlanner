@@ -3,8 +3,6 @@ package edu.sungshin.univplanner;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,7 +15,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +38,17 @@ public class login extends AppCompatActivity {
     EditText idEditText, pwEditText;
     String idText, pwText;
     CheckBox checkBoxID, checkBoxPW;
+
+    /***** School Radio Group *****/
+    RadioGroup schoolRadioGroup;
+    RadioButton sswuRadioBtn, knuRadioBtn;
+    int schoolIdx = 0;
+    String[] schoolName = {
+            "성신여자대학교",
+            "경북대학교"
+    };
+    /******************************/
+
     boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
@@ -59,6 +69,28 @@ public class login extends AppCompatActivity {
         pwEditText = (EditText) findViewById(R.id.login_pw);
         checkBoxID = (CheckBox) findViewById(R.id.login_checkbox_id);
         checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
+
+        /***** School Radio Group *****/
+        schoolRadioGroup = (RadioGroup) findViewById(R.id.login_schoolRadioGroup);
+        sswuRadioBtn = (RadioButton) findViewById(R.id.login_sswuRadioBtn);
+        knuRadioBtn = (RadioButton) findViewById(R.id.login_knuRadioBtn);
+
+        schoolRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.login_sswuRadioBtn) {
+                    schoolIdx = 0;
+                    Toast.makeText(login.this, schoolName[schoolIdx], Toast.LENGTH_SHORT).show();
+                }
+
+                if (checkedId == R.id.login_knuRadioBtn) {
+                    schoolIdx = 1;
+                    Toast.makeText(login.this, schoolName[schoolIdx], Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        /******************************/
 
         SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
         String saveIDdata = pref.getString("id","");
@@ -148,6 +180,11 @@ public class login extends AppCompatActivity {
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
 
+                    SharedPreferences prefSchool = getSharedPreferences("saveSchool", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorSchoolIdx = prefSchool.edit();
+                    editorSchoolIdx.putString("schoolIdx", String.valueOf(schoolIdx));
+                    editorSchoolIdx.apply();
+
                     SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
                     editorID.putString("id", idText);
@@ -217,11 +254,8 @@ public class login extends AppCompatActivity {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                out.println(idText);
-                Log.e("send", idText);
-
-                out.println(pwText);
-                Log.e("send", pwText);
+                out.println(schoolIdx + "\n" + idText + "\n" + pwText);
+                Log.e("send", schoolIdx + "\n" + idText + "\n" + pwText);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
@@ -396,7 +430,10 @@ public class login extends AppCompatActivity {
                     Log.e("fb uid", userInfo);
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
+                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("school");
+                    myRef.setValue(schoolName[schoolIdx]);
+
+                    myRef = database.getReference("User").child(userInfo).child("id");
                     myRef.setValue(idText);
 
                     myRef = database.getReference("User").child(userInfo).child("name");
