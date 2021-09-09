@@ -224,7 +224,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                 }
             }
         });
-    }
+    } // end of onCreate
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

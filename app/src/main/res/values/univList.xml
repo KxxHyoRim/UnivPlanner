@@ -3,5 +3,6 @@
     <string-array name="univList">
         <item>성신여자대학교</item>
         <item>경북대학교</item>
+        <item>한국외국어대학교</item>
     </string-array>
 </resources>
