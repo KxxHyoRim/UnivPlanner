@@ -13,10 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +37,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Vector;
 
-public class login extends AppCompatActivity {
+public class login extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button button;
     EditText idEditText, pwEditText;
     String idText, pwText;
     CheckBox checkBoxID, checkBoxPW;
+    Spinner univListSpinner;
     boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
@@ -48,6 +52,11 @@ public class login extends AppCompatActivity {
     Vector<String> lectureAssignmentVec = new Vector<String>();
     private long backKeyPressedTime = 0;
     private Toast toast;
+    int schoolIdx = 0;
+    String[] schoolName = {
+            "성신여자대학교",
+            "경북대학교"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,14 @@ public class login extends AppCompatActivity {
         pwEditText = (EditText) findViewById(R.id.login_pw);
         checkBoxID = (CheckBox) findViewById(R.id.login_checkbox_id);
         checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
+        univListSpinner = (Spinner) findViewById(R.id.univList);
+
+        /** 대학교 지정 */
+        String[] univListFromXML = getResources().getStringArray(R.array.univList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, univListFromXML);
+        univListSpinner.setAdapter(adapter);
+        univListSpinner.setOnItemSelectedListener(this);
+
 
         SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
         String saveIDdata = pref.getString("id","");
@@ -148,6 +165,11 @@ public class login extends AppCompatActivity {
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
 
+                    SharedPreferences prefSchool = getSharedPreferences("saveSchool", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorSchoolIdx = prefSchool.edit();
+                    editorSchoolIdx.putString("schoolIdx", String.valueOf(schoolIdx));
+                    editorSchoolIdx.apply();
+
                     SharedPreferences prefID = getSharedPreferences("saveID", MODE_PRIVATE);
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorID = prefID.edit();
                     editorID.putString("id", idText);
@@ -204,6 +226,17 @@ public class login extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        schoolIdx = position;
+        Log.e("Spinner", schoolName[schoolIdx]);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // do Nothing
+    }
+
     protected class ClientThread extends Thread {
         public void run() {
             String host = "220.69.171.222";
@@ -217,11 +250,8 @@ public class login extends AppCompatActivity {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                out.println(idText);
-                Log.e("send", idText);
-
-                out.println(pwText);
-                Log.e("send", pwText);
+                out.println(schoolIdx + "\n" + idText + "\n" + pwText);
+                Log.e("send", schoolIdx + "\n" + idText + "\n" + pwText);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
@@ -396,7 +426,10 @@ public class login extends AppCompatActivity {
                     Log.e("fb uid", userInfo);
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
+                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("school");
+                    myRef.setValue(schoolName[schoolIdx]);
+
+                    myRef = database.getReference("User").child(userInfo).child("id");
                     myRef.setValue(idText);
 
                     myRef = database.getReference("User").child(userInfo).child("name");

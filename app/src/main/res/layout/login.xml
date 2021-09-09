@@ -19,26 +19,6 @@
             android:layout_centerVertical="true"
             >
 
-            <RadioGroup
-                android:id="@+id/login_schoolRadioGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/login_sswuRadioBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="성신여대" />
-
-                <RadioButton
-                    android:id="@+id/login_knuRadioBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="경북대" />
-            </RadioGroup>
-
             <TextView
                 android:id="@+id/Univname"
                 android:layout_width="match_parent"
