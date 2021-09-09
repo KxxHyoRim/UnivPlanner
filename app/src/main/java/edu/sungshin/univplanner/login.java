@@ -53,10 +53,6 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
     private long backKeyPressedTime = 0;
     private Toast toast;
     int schoolIdx = 0;
-    String[] schoolName = {
-            "성신여자대학교",
-            "경북대학교"
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +225,6 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         schoolIdx = position;
-        Log.e("Spinner", schoolName[schoolIdx]);
     }
 
     @Override
@@ -426,10 +421,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     Log.e("fb uid", userInfo);
 
                     FirebaseDatabase database = FirebaseDatabase.getInstance("https://univp-1db5d-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("school");
-                    myRef.setValue(schoolName[schoolIdx]);
-
-                    myRef = database.getReference("User").child(userInfo).child("id");
+                    DatabaseReference myRef = database.getReference("User").child(userInfo).child("id");
                     myRef.setValue(idText);
 
                     myRef = database.getReference("User").child(userInfo).child("name");
