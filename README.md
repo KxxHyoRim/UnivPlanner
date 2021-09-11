@@ -34,3 +34,7 @@ https://play.google.com/store/apps/details?id=edu.sungshin.univplanner
 > Android Studio의 언어로 JAVA를 활용했습니다.<br/>
 > 서버는 그래픽카드가 달려있는 Ubuntu로 설정하였습니다. <br/>
 > 실시간 데이터베이스로는 Firebase를 활용하였습니다. <br/>
+
+
+#### 작동원리
+![image](https://user-images.githubusercontent.com/59546818/132957784-ed2d72ac-a504-462f-bc46-973fe78c48bb.png)
