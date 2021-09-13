@@ -235,21 +235,33 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     button.setText("로그인 정보 확인중 ..");
                     button.setEnabled(false);
                     Log.e("btn", "click");
-                    ClientThread thread = new ClientThread();
-                    thread.start();
+
+                    // If School Selected in Spinner
+                    if (schoolIdx != -1) {
+                        ClientThread thread = new ClientThread();
+                        thread.start();
+                    }
+
+                    // If School Not Selected in Spinner
+                    else {
+                        Toast.makeText(login.this,
+                                "학교를 선택해주세요", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
     } // end of onCreate
 
+    // Exclude Hint in Spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        schoolIdx = position;
+        schoolIdx = position - 1;
     }
 
+    // Default Spinner : Hint
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        schoolIdx = 0;
+        schoolIdx = -1;
     }
 
     protected class ClientThread extends Thread {
