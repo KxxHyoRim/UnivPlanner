@@ -20,16 +20,6 @@
             >
 
             <TextView
-                android:id="@+id/Univname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="성신여자대학교"
-                android:textSize="15dp"
-                android:layout_marginTop="30dp"
-                android:textColor="#000000" />
-
-            <TextView
                 android:id="@+id/appname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
