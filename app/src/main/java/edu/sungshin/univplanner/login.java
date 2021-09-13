@@ -85,6 +85,10 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
         pref = getSharedPreferences("isPWSaved",MODE_PRIVATE);
         String isPWSaved = pref.getString("isSaved","");
 
+        pref = getSharedPreferences("saveUniv", MODE_PRIVATE);
+        String saveUnivData = pref.getString("univ", "");
+
+
         checkBoxID.setChecked(false);
         checkBoxPW.setChecked(false);
 
@@ -185,6 +189,12 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorIsPW = prefIsPWSaved.edit();
                     editorIsPW.putString("isSaved", Boolean.toString(isPWcheckBoxChecked));
                     editorIsPW.apply();
+
+//                    SharedPreferences prefUniv= getSharedPreferences("saveUniv", MODE_PRIVATE);
+//                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorUniv = prefIsPWSaved.edit();
+//                    editorUniv.putString("univ", String.valueOf(univListSpinner));
+//                    editorUniv.apply();
+
 
                     checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
