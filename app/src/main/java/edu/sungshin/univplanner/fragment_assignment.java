@@ -140,13 +140,6 @@ public class fragment_assignment extends Fragment {
                     }
                 });
 
-
-//                // 수강과목 과목명 가져오기
-//                for(int i=1; i<totalLectureNum+1;i++){
-//
-//
-//                }
-
             }
 
             @Override
@@ -154,10 +147,6 @@ public class fragment_assignment extends Fragment {
 
             }
         });
-
-
-
-
     }
     //디데이 구하는 함수
     public static long Dday(String mday){
@@ -265,7 +254,7 @@ public class fragment_assignment extends Fragment {
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
-                    }
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error){}

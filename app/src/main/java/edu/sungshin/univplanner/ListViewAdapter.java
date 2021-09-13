@@ -30,7 +30,7 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     public void sort_hashMap(){
-        Log.e("sort 함수 진입","성공");
+        Log.e("강의 sort 함수 진입","성공");
         //해쉬맵 정렬
 
         List keySetList = new ArrayList<>(hash_listView.keySet());
