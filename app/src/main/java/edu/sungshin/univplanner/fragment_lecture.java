@@ -267,6 +267,7 @@ public class fragment_lecture extends Fragment  {
 
                                     String deadline_Date = lecture_deadline.substring(lecture_deadline.lastIndexOf("~") + 2, lecture_deadline.lastIndexOf("~") + 13);
                                     long d_day = Dday(deadline_Date);  //디데이 구하기
+                                    Log.e("디데이:", d_day + "");
                                     Log.e("강의 수강 퍼센트", percentage_array[2] + "");
                                     //수강도 (퍼센트 구하기)
                                     for (int j = 0; j < percentage_num; j++) {
@@ -286,8 +287,18 @@ public class fragment_lecture extends Fragment  {
                                         isDone = "미수강";
                                     }
 
+                                    //lecture_checked 확인--------------------------------------------
+                                    if(lecture_checked[count_i])
+                                        Log.e("lecture_checked: ", "count_i = " + count_i + " / bool = true" );
+                                    else
+                                        Log.e("lecture_checked: ", "count_i = " + count_i + " / bool = false" );
+                                    //-----------------------------------------------------------------
+
                                     if (d_day >= 0 && lecture_checked[count_i])
+                                    {
                                         listview_adapter.addItem("D-" + d_day, lectureName, lecture_deadline, isDone, percentage_average, d_day);
+                                        Log.e("리스트뷰 아이템 추가: ", "YES" );
+                                    }
 
                                     if (count_i == totalLectureNum)
                                         listview_adapter.sort_hashMap();

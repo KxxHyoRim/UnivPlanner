@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NotNull DataSnapshot snapshot){
                 lecture_fullList = snapshot.getValue(String.class);
-                //Log.e("load letureName:", lecture_fullList + "");
+                Log.e("load letureName:", lecture_fullList + "");
 
                 lectureName_array = lecture_fullList.split("\n");
                 lecture_name = new ArrayList<>(Arrays.asList(lectureName_array));
