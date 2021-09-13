@@ -43,6 +43,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
     String idText, pwText;
     CheckBox checkBoxID, checkBoxPW;
     Spinner univListSpinner;
+    int univSpinnerPosition;
     boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
@@ -66,13 +67,14 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
         checkBoxPW = (CheckBox) findViewById(R.id.login_checkbox_pw);
         univListSpinner = (Spinner) findViewById(R.id.univList);
 
-        /** 대학교 지정 */
+        /** 대학교 지정 Spinner */
         String[] univListFromXML = getResources().getStringArray(R.array.univList);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, univListFromXML);
         univListSpinner.setAdapter(adapter);
         univListSpinner.setOnItemSelectedListener(this);
 
 
+        /** SharedPreferences 저장된 값 가져오기*/
         SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
         String saveIDdata = pref.getString("id","");
 
@@ -85,6 +87,11 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
         pref = getSharedPreferences("isPWSaved",MODE_PRIVATE);
         String isPWSaved = pref.getString("isSaved","");
 
+        pref = getSharedPreferences("saveUniv", MODE_PRIVATE);
+        int saveSpinnerPosition = pref.getInt("univIdx", 0);
+
+
+        /** SharedPreferences 값 대로 세팅하기 */
         checkBoxID.setChecked(false);
         checkBoxPW.setChecked(false);
 
@@ -102,6 +109,8 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
             checkBoxPW.setChecked(true);
             isPWcheckBoxChecked = true;
         }
+
+        univListSpinner.setSelection(saveSpinnerPosition);
 
         checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -161,6 +170,15 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     idText = idEditText.getText().toString();
                     pwText = pwEditText.getText().toString();
 
+                    /** 사용자 입력값 SharedPreferences에 저장 */
+
+                    // Login.java에서 Spinner값 지정할 용도
+                    SharedPreferences prefUniv= getSharedPreferences("saveUniv", MODE_PRIVATE);
+                    @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorUniv = prefUniv.edit();
+                    editorUniv.putInt("univIdx", schoolIdx);
+                    editorUniv.commit();
+
+                    // MainActivity.java에서 Spinner 값 지정할 용도
                     SharedPreferences prefSchool = getSharedPreferences("saveSchool", MODE_PRIVATE);
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorSchoolIdx = prefSchool.edit();
                     editorSchoolIdx.putString("schoolIdx", String.valueOf(schoolIdx));
@@ -185,6 +203,8 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorIsPW = prefIsPWSaved.edit();
                     editorIsPW.putString("isSaved", Boolean.toString(isPWcheckBoxChecked));
                     editorIsPW.apply();
+
+
 
                     checkBoxID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -229,7 +249,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        // do Nothing
+        schoolIdx = 0;
     }
 
     protected class ClientThread extends Thread {
