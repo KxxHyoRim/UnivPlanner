@@ -26,8 +26,9 @@
                 android:layout_marginLeft="10dp"
                 android:text="성신여자대학교"
                 android:textSize="15dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:textColor="#000000" />
+
             <TextView
                 android:id="@+id/appname"
                 android:layout_width="match_parent"
@@ -36,8 +37,18 @@
                 android:text="UnivPlanner"
                 android:textSize="30dp"
                 android:textStyle="bold"
-                android:layout_marginBottom="100dp"
+                android:layout_marginBottom="40dp"
                 android:textColor="#000000"/>
+
+            <Spinner
+                android:id="@+id/univList"
+                android:layout_marginBottom="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"/>
+
             <EditText
                 android:id="@+id/login_id"
                 android:layout_width="match_parent"
@@ -57,20 +68,10 @@
                 android:textSize="13dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="30dp"
                 android:hint="패스워드를 입력하세요."
                 android:inputType="textPassword" />
 
-            <Button
-                android:id="@+id/login_btn"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nanum_squre_regular"
-                android:text="로그인"
-                android:textSize="15dp"
-                android:backgroundTint="@color/purple_200"
-                android:textStyle="bold" />
+
 
 
             <LinearLayout
@@ -97,6 +98,19 @@
                     android:textSize="13dp" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/login_btn"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/nanum_squre_regular"
+                android:text="로그인"
+                android:textSize="15dp"
+                android:backgroundTint="@color/purple_200"
+                android:textStyle="bold" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

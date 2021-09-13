@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
     private long backKeyPressedTime = 0;
     private Toast exitToast;
     Button syncBtn;
-    ImageView syncImage, univLogo;
+    ImageView syncImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
 
         //페이지 갯수지정
         mViewPager.setOffscreenPageLimit(2);
-
         //어댑터 객체 생성
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
@@ -946,8 +945,8 @@ public class MainActivity extends AppCompatActivity {
 
     protected class ClientThread extends Thread {
         public void run() {
-            String host = "13.124.79.16";
-            int port = 8080;
+            String host = "220.69.171.222";
+            int port = 38497;
 
             try {
                 Log.e("sck", "start");
@@ -957,17 +956,17 @@ public class MainActivity extends AppCompatActivity {
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-                SharedPreferences pref = getSharedPreferences("saveID",MODE_PRIVATE);
+                SharedPreferences pref = getSharedPreferences("saveSchool",MODE_PRIVATE);
+                int schoolIdx = Integer.parseInt(pref.getString("schoolIdx",""));
+
+                pref = getSharedPreferences("saveID",MODE_PRIVATE);
                 String saveIDdata = pref.getString("id","");
 
                 pref = getSharedPreferences("savePW",MODE_PRIVATE);
                 String savePWdata = pref.getString("pw","");
 
-                out.println(saveIDdata);
-                Log.e("send", saveIDdata);
-
-                out.println(savePWdata);
-                Log.e("send", savePWdata);
+                out.println(schoolIdx + "\n" + saveIDdata + "\n" + savePWdata);
+                Log.e("send", schoolIdx + "\n" + saveIDdata + "\n" + savePWdata);
 
                 String rev = in.readLine();
                 Log.e("receive", rev);
@@ -986,6 +985,15 @@ public class MainActivity extends AppCompatActivity {
                     lectureNameList = "";
 
                     for (int i = 0; i < realTotalLectureNum; i++) {
+                        int curIdx = i + 1;
+                        MainActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(MainActivity.this,
+                                        "LMS 동기화 " + curIdx + "/" + realTotalLectureNum,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         String lectureTitle = in.readLine();	// outer lecture title
 
                         if (lectureTitle.equals("LectureDone")) {   // if 비정규과목, break
