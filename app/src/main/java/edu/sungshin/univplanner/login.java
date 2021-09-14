@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
     String idText, pwText;
     CheckBox checkBoxID, checkBoxPW;
     Spinner univListSpinner;
-    int univSpinnerPosition;
+    int saveSpinnerPosition;
     boolean isIDcheckBoxChecked, isPWcheckBoxChecked;
     private FirebaseAuth mAuth;
     boolean isLoginSuccess;
@@ -69,7 +70,8 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
 
         /** 대학교 지정 Spinner */
         String[] univListFromXML = getResources().getStringArray(R.array.univList);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, univListFromXML);
+        ArrayAdapter<String> adapter;
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, univListFromXML);
         univListSpinner.setAdapter(adapter);
         univListSpinner.setOnItemSelectedListener(this);
 
@@ -88,7 +90,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
         String isPWSaved = pref.getString("isSaved","");
 
         pref = getSharedPreferences("saveUniv", MODE_PRIVATE);
-        int saveSpinnerPosition = pref.getInt("univIdx", 0);
+        saveSpinnerPosition = pref.getInt("univIdx", 0);
 
 
         /** SharedPreferences 값 대로 세팅하기 */
@@ -175,7 +177,7 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     // Login.java에서 Spinner값 지정할 용도
                     SharedPreferences prefUniv= getSharedPreferences("saveUniv", MODE_PRIVATE);
                     @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editorUniv = prefUniv.edit();
-                    editorUniv.putInt("univIdx", schoolIdx);
+                    editorUniv.putInt("univIdx", schoolIdx+1); // 가장 작은수가 0이 되도록(onItemSelected에서 -1했기때문)
                     editorUniv.commit();
 
                     // MainActivity.java에서 Spinner 값 지정할 용도
@@ -246,6 +248,11 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
                     else {
                         Toast.makeText(login.this,
                                 "학교를 선택해주세요", Toast.LENGTH_SHORT).show();
+                        idEditText.setEnabled(true);
+                        pwEditText.setEnabled(true);
+                        button.setEnabled(true);
+                        button.setText("로그인");
+
                     }
                 }
             }
@@ -256,11 +263,20 @@ public class login extends AppCompatActivity implements AdapterView.OnItemSelect
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         schoolIdx = position - 1;
+
+        if (position == 0){
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+        }
+
     }
 
     // Default Spinner : Hint
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+        if (saveSpinnerPosition == 0){
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.GRAY);
+        }
         schoolIdx = -1;
     }
 
