@@ -81,7 +81,7 @@ public class Setting extends PreferenceFragment {
             }
         });
 
-        // isClick 이면 뷰 표시 코딩 작업 하기
+        // isClick에 따라서 뷰 표시여부 코딩 작업 하기
 
 
         /** firebase 연동 */
