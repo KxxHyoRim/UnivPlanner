@@ -23,12 +23,16 @@
                 android:id="@+id/appname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Univ. Planner"
+                android:textSize="28dp"
+                android:gravity="left"
                 android:layout_marginLeft="10dp"
-                android:text="UnivPlanner"
-                android:textSize="30dp"
+                android:fontFamily="@font/nanum_squre_regular"
                 android:textStyle="bold"
                 android:layout_marginBottom="40dp"
+                android:shadowDy="@android:integer/config_longAnimTime"
                 android:textColor="#000000"/>
+
 
             <Spinner
                 android:id="@+id/univList"
