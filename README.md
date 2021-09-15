@@ -5,6 +5,10 @@
 ### 지금 Play Store에서 다운로드 하실 수 있습니다!
 https://play.google.com/store/apps/details?id=edu.sungshin.univplanner
 
+<br/>
+
+![image](https://user-images.githubusercontent.com/59546818/133485698-2aa71f7c-f013-4ed2-8c13-957a70134a8e.png)
+
 <br/><br/>
 
 ### 어플리케이션 실행 화면
@@ -27,8 +31,8 @@ https://play.google.com/store/apps/details?id=edu.sungshin.univplanner
 
 ### 프로젝트 설명
 #### 개발 동기
-> COVID19의 영향으로 2020년부터 지금까지 대부분의 대학들이 온라인 강의를 진행하고 있다.<br/>
-> 강의와 과제의 일정관리가 쉽지 않기 때문에, 이를 시각화해서 나타내주는 Android 어플리케이션을 개발하게 되었다.<br/>
+> COVID19의 영향으로 2020년부터 지금까지 대부분의 대학들이 온라인 강의를 진행하고 있습니다.<br/>
+> 강의와 과제의 일정관리가 쉽지 않기 때문에, 이를 시각화해서 나타내주는 Android 어플리케이션을 개발하게 되었습니다.<br/>
 
 #### 기술
 > Android Studio의 언어로 JAVA를 활용했습니다.<br/>
