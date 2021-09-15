@@ -7,9 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -57,10 +59,55 @@ public class SettingActivity extends AppCompatActivity {
 
     ImageView univLogo;
 
+    Boolean isClick = false;
+    TextView contactUs;
+    EditText contactUsText;
+    ImageView sendBtn;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        contactUs = findViewById(R.id.contactUs);
+        contactUsText = findViewById(R.id.contactUsText);
+        sendBtn = findViewById(R.id.sendBtn);
+
+        // 문의하기 Textview
+        contactUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 문의하기 EditText랑 Send버튼 숨기기/보이기
+                isClick = !isClick;
+                if (isClick){
+                    contactUsText.setVisibility(View.VISIBLE);
+                    sendBtn.setVisibility(View.VISIBLE);
+                }else {
+                    contactUsText.setVisibility(View.GONE);
+                    sendBtn.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sendBtn.getVisibility() == View.VISIBLE){
+                    String complain = String.valueOf(contactUsText.getText());
+                    Log.e("complain", complain);
+
+                    Intent email = new Intent(Intent.ACTION_SEND);
+                    email.setType("plain/text");
+                    String[] address = {"sswu.univplanner@gmail.com"};
+                    email.putExtra(Intent.EXTRA_EMAIL, address);
+//                    email.putExtra(Intent.EXTRA_SUBJECT, "test@test");
+                    email.putExtra(Intent.EXTRA_TEXT, complain);
+                    startActivity(email);
+
+                }
+            }
+        });
 
         univLogo = (ImageView) findViewById(R.id.assignment_univLogo);
         univLogo.setOnClickListener(new View.OnClickListener() {

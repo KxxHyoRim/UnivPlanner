@@ -3,6 +3,7 @@ package edu.sungshin.univplanner;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
@@ -42,8 +43,6 @@ public class Setting extends PreferenceFragment {
     private ChildEventListener myChildEventListener;
     private FirebaseAuth mAuth;
 
-    Boolean isClick = false;
-
     String lecture_fullList;
     int totalLectureNum;
     String[] lectureName_array;
@@ -55,8 +54,7 @@ public class Setting extends PreferenceFragment {
     CheckBoxPreference subjPreference;
     PreferenceScreen lectureListScreen;
     PreferenceScreen assignmentListScreen;
-    PreferenceScreen contactUs;
-    Preference contactUsText;
+
 
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,20 +66,6 @@ public class Setting extends PreferenceFragment {
         prefs.registerOnSharedPreferenceChangeListener(prefListener1);
 
         lectureListScreen = (PreferenceScreen)findPreference("optional_subject_lecture_in");
-        contactUs = (PreferenceScreen) findPreference("contactUs");
-        contactUsText = (Preference) findPreference("contactUsText");
-
-
-        contactUs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                isClick = !isClick;
-                Log.e("contactUs", "click");
-                return false;
-            }
-        });
-
-        // isClick에 따라서 뷰 표시여부 코딩 작업 하기
 
 
         /** firebase 연동 */

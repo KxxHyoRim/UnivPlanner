@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     >
     <RelativeLayout
         android:layout_width="match_parent"
@@ -68,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:textSize="15dp"
                         android:textStyle="bold"
                         android:textColor="@color/black"
@@ -95,6 +96,8 @@
 
                     </FrameLayout>
                 </LinearLayout>
+
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -154,12 +157,76 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_marginTop="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/light_Gray"
+                    android:layout_below="@+id/toolbar"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="문의하기"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:id="@+id/contactUs"
+                    android:background="@color/white"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="15dp"
+                    android:paddingBottom="20dp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/contactUsText"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="문의사항을 입력하세요."
+                    android:textSize="13dp"
+                    android:scrollbars="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@color/white"/>
+
+
+                <ImageView
+                    android:id="@+id/sendBtn"
+                    android:visibility="gone"
+                    android:layout_width="84dp"
+                    android:layout_height="52dp"
+                    android:layout_gravity="right"
+                    android:paddingRight="15dp"
+                    android:paddingBottom="3dp"
+                    android:src="@drawable/sendbtn" />
+
+                <View
+                    android:layout_marginTop="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/light_Gray"
+                    android:layout_below="@+id/toolbar"/>
+
+
+            </LinearLayout>
+
+
             <fragment
                 android:id="@+id/settings_fragment"
                 android:name="edu.sungshin.univplanner.Setting"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 />
+
 
         </LinearLayout>
 
@@ -174,5 +241,7 @@
         app:headerLayout="@layout/main_navheader"
         app:menu="@menu/navi_menu"
         />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
