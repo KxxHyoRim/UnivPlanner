@@ -96,11 +96,18 @@
 
         <PreferenceScreen
             android:title="앱버전"
-            android:summary="v.1.0.0">
+            android:summary="v.2.1.0">
         </PreferenceScreen>
 
         <PreferenceScreen
+            android:key="contactUs"
             android:title="문의하기">
         </PreferenceScreen>
+
+        <Preference
+            android:selectable="false"
+            android:enabled="true"
+            android:key="contactUsText"
+            android:summary="문의사항을 입력해주세요." />
 
 </PreferenceScreen>

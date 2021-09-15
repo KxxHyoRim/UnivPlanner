@@ -42,6 +42,8 @@ public class Setting extends PreferenceFragment {
     private ChildEventListener myChildEventListener;
     private FirebaseAuth mAuth;
 
+    Boolean isClick = false;
+
     String lecture_fullList;
     int totalLectureNum;
     String[] lectureName_array;
@@ -53,6 +55,9 @@ public class Setting extends PreferenceFragment {
     CheckBoxPreference subjPreference;
     PreferenceScreen lectureListScreen;
     PreferenceScreen assignmentListScreen;
+    PreferenceScreen contactUs;
+    Preference contactUsText;
+
 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +68,20 @@ public class Setting extends PreferenceFragment {
         prefs.registerOnSharedPreferenceChangeListener(prefListener1);
 
         lectureListScreen = (PreferenceScreen)findPreference("optional_subject_lecture_in");
+        contactUs = (PreferenceScreen) findPreference("contactUs");
+        contactUsText = (Preference) findPreference("contactUsText");
+
+
+        contactUs.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                isClick = !isClick;
+                Log.e("contactUs", "click");
+                return false;
+            }
+        });
+
+        // isClick 이면 뷰 표시 코딩 작업 하기
 
 
         /** firebase 연동 */
@@ -141,6 +160,7 @@ public class Setting extends PreferenceFragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
+
         });
     }// onCreate
 
