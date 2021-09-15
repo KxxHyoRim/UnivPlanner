@@ -4,6 +4,7 @@ package edu.sungshin.univplanner;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 public class splash extends Activity {
 
