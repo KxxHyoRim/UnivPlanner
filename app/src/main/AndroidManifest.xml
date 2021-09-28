@@ -18,7 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UnivPlanner">
 
-
         <activity android:name=".splash"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
@@ -27,16 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-
-        <!--
-        <activity android:name=".login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
 
         <activity android:name=".check_lecture_Activity"/>
         <activity android:name=".check_assignment_Activity"/>

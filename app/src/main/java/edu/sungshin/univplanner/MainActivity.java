@@ -276,8 +276,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent4);
                         break;
                     case R.id.setting:
-                        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
-                        startActivity(intent);
+                        Intent intent5 = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(intent5);
                         break;
                     case R.id.logout:
                         Intent intent2 = new Intent(getApplicationContext(), login.class);
