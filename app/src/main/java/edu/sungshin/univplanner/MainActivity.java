@@ -422,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError error){}
                     });
 
+                    /** Error1*/
                     prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
                         public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
                             Log.d("tag","클릭된 Preference의 key는 "+key);
@@ -431,12 +432,16 @@ public class MainActivity extends AppCompatActivity {
                             boolean checked = sp.getBoolean(key, true);
                             Log.d("tag","bool Check "+ checked + " " );
 
-                            assignment_checked[index] = checked;
 
-                            for(int i=1; i<totalLectureNum+1;i++){
-                                String lecture_key = assignment_base_key + i;
-                                assignment_checked[i] = sp.getBoolean(lecture_key, true);
-                                Log.d("tag_checked", assignment_checked[i] +" at " + i);
+                            if(index <= totalLectureNum ) {             /** Changed!!! */
+
+                                assignment_checked[index] = checked;    /** Error2*/
+
+                                for (int i = 1; i < totalLectureNum + 1; i++) {
+                                    String lecture_key = assignment_base_key + i;
+                                    assignment_checked[i] = sp.getBoolean(lecture_key, true);
+                                    Log.d("tag_checked", assignment_checked[i] + " at " + i);
+                                }
                             }
                         }
                     });
@@ -451,12 +456,15 @@ public class MainActivity extends AppCompatActivity {
                             boolean checked = sp.getBoolean(key, true);
                             Log.d("tag","bool Check "+ checked + " " );
 
-                            lecture_checked[index] = checked;
+                            if(index <= totalLectureNum ) {             /** Changed!!! */
 
-                            for(int i=1; i<totalLectureNum+1;i++){
-                                String lecture_key = lecture_base_key + i;
-                                lecture_checked[i] = sp.getBoolean(lecture_key, true);
-                                Log.d("tag_checked", lecture_checked[i] +" at " + i);
+                                lecture_checked[index] = checked;
+
+                                for (int i = 1; i < totalLectureNum + 1; i++) {
+                                    String lecture_key = lecture_base_key + i;
+                                    lecture_checked[i] = sp.getBoolean(lecture_key, true);
+                                    Log.d("tag_checked", lecture_checked[i] + " at " + i);
+                                }
                             }
                         }
                     });

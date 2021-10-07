@@ -121,22 +121,27 @@ public class fragment_assignment extends Fragment {
 //                    lecture_checked[i] = true;
 //                }
 
+                /**Error4*/
                 prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
                     public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-                        Log.d("tag","클릭된 Preference의 key는 "+key);
-                        char idx =  key.charAt(key.length()-1);
+                        Log.d("tag","클릭된 Preference의 key는 "+key);   // key ex. assignment_subject8
+                        char idx =  key.charAt(key.length()-1);                      // 마지막 인덱스 8의 char 가져옴
+
                         int index = idx-'0';
                         Log.d("tag","key 의 마지막 자리 "+index);
                         boolean checked = sp.getBoolean(key, true);
                         Log.d("tag","bool Check "+ checked + " " );
 
-                        assignment_checked[index] = checked;
+                        if(index <= totalLectureNum ) {             /** Changed!!! */
+                            assignment_checked[index] = checked;    /**Error3*/
 
-                        for(int i=1; i<totalLectureNum+1;i++){
-                            String assignment_key = assignment_base_key + i;
-                            assignment_checked[i] = sp.getBoolean(assignment_key, true);
-                            Log.d("a :: tag_checked", assignment_checked[i] +" at " + i);
+                            for(int i=1; i<totalLectureNum+1;i++){
+                                String assignment_key = assignment_base_key + i;
+                                assignment_checked[i] = sp.getBoolean(assignment_key, true);
+                                Log.d("a :: tag_checked", assignment_checked[i] +" at " + i);
+                            }
                         }
+
                     }
                 });
 
