@@ -114,12 +114,12 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    android:layout_width="230dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="50dp"
-                    android:text="아이디저장 및 자동 로그인은 공개된 장소의\n단말기에서는 사용을 권하지 않습니다." />
+                    android:text="아이디 및 비밀번호 저장은 공개된 장소의\n단말기에서는 사용을 권하지 않습니다." />
             </LinearLayout>
 
         </LinearLayout>
