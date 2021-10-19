@@ -114,37 +114,15 @@ public class fragment_assignment extends Fragment {
                 // 수강하는 과목 개수 가져오기
                 lectureName_array = lecture_fullList.split("\n");
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
-                Log.e("hyo_total_lecture_num", totalLectureNum + "");
+                Log.e("onDataChange_A", totalLectureNum + "");
 
-                assignment_checked = new Boolean[totalLectureNum+1];
-//                for(int i=1; i<totalLectureNum+1;i++){
-//                    lecture_checked[i] = true;
-//                }
-
-                /**Error4*/
-                prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-                        Log.d("tag","클릭된 Preference의 key는 "+key);   // key ex. assignment_subject8
-                        char idx =  key.charAt(key.length()-1);                      // 마지막 인덱스 8의 char 가져옴
-
-                        int index = idx-'0';
-                        Log.d("tag","key 의 마지막 자리 "+index);
-                        boolean checked = sp.getBoolean(key, true);
-                        Log.d("tag","bool Check "+ checked + " " );
-
-                        if(index <= totalLectureNum ) {             /** Changed!!! */
-                            assignment_checked[index] = checked;    /**Error3*/
-
-                            for(int i=1; i<totalLectureNum+1;i++){
-                                String assignment_key = assignment_base_key + i;
-                                assignment_checked[i] = sp.getBoolean(assignment_key, true);
-                                Log.d("a :: tag_checked", assignment_checked[i] +" at " + i);
-                            }
-                        }
-
-                    }
-                });
-
+                // 초기화 (기존 설정값 로드)
+                assignment_checked = new Boolean[totalLectureNum + 1];
+                for (int i = 1; i < totalLectureNum + 1; i++) {
+                    String assignment_key = assignment_base_key + i;
+                    assignment_checked[i] = prefs.getBoolean(assignment_key, true);
+                    Log.d("onDataChange_A", assignment_checked[i] + " at " + i);
+                }
             }
 
             @Override
@@ -152,26 +130,76 @@ public class fragment_assignment extends Fragment {
 
             }
         });
+
+        /**Error4*/
+        prefs.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+
+                int index = getKeyIdx(key);
+                boolean checked = sp.getBoolean(key, true);
+                Log.d("tag", "bool Check " + checked + " ");
+
+                if (index <= totalLectureNum) {             /** Changed!!! */
+                    assignment_checked[index] = checked;    /**Error3*/
+
+//                    for (int i = 1; i < totalLectureNum + 1; i++) {
+//                        String assignment_key = assignment_base_key + i;
+//                        assignment_checked[i] = sp.getBoolean(assignment_key, true);
+////                                Log.d("a :: tag_checked", assignment_checked[i] +" at " + i);
+//                    }
+                }
+
+            }
+
+            private int getKeyIdx(String key) {
+
+                /* 목적 :
+
+                위 pref2의 Listener가 작동할 때 받아오는 key 값은 setting.xml에 작성되어있는
+                CheckBoxPreference들의 key를 가져온다.
+                각 key들은 lecture_subject8 혹은 assignment_subject15 와 같이
+                '강의정보 / 과제정보 + 숫자' 형태로 naming 되어있다.
+                이때 getKeyIdx라는 함수는 key 뒷부분의 숫자를 return 하는 함수이다.
+                (xml의 몇번째 checkbox가 클릭되었는지 확인)
+
+                원리 :
+                substring() 메소드를 확용하여 subject 이후의 모든 값을 가져오도록 코딩
+                -> 한자리 정수, 두자리 정수 일 떄 모두 문제없이 작동한다.
+
+                * */
+
+                int subj_idx = key.indexOf("subject");
+                System.out.println("subj_idx " + subj_idx);
+                int idx = Integer.parseInt(key.substring(subj_idx + 7));
+                System.out.println("idx_new " + idx);
+
+                return idx;
+            }
+        });
+
+
     }
+
     //디데이 구하는 함수
-    public static long Dday(String mday){
-        if(mday==null)
+    public static long Dday(String mday) {
+        if (mday == null)
             return 0;
         mday = mday.trim();
         int first = mday.indexOf(".");
         int last = mday.lastIndexOf(".");
-        int year = Integer.parseInt(mday.substring(0,first));
-        int month = Integer.parseInt(mday.substring(first+1,last));
-        int day = Integer.parseInt(mday.substring(last+1,mday.length()));
+        int year = Integer.parseInt(mday.substring(0, first));
+        int month = Integer.parseInt(mday.substring(first + 1, last));
+        int day = Integer.parseInt(mday.substring(last + 1, mday.length()));
 
         GregorianCalendar cal = new GregorianCalendar();
-        long currentTime = cal.getTimeInMillis() / (1000*60*60*24);
-        cal.set(year,month-1,day);
-        long birthTime = cal.getTimeInMillis() / (1000*60*60*24);
-        int interval = (int)(birthTime-currentTime);
+        long currentTime = cal.getTimeInMillis() / (1000 * 60 * 60 * 24);
+        cal.set(year, month - 1, day);
+        long birthTime = cal.getTimeInMillis() / (1000 * 60 * 60 * 24);
+        int interval = (int) (birthTime - currentTime);
 
         return interval;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -203,7 +231,7 @@ public class fragment_assignment extends Fragment {
         DatabaseReference myRef = database.getReference("User").child(userInfo).child("lectureName");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot){
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
                 lecture_fullList = snapshot.getValue(String.class);
                 //Log.e("load letureName:", lecture_fullList + "");
 
@@ -212,57 +240,59 @@ public class fragment_assignment extends Fragment {
                 Log.e("과제 total_lecture_num", totalLectureNum + "");
 
 
-                for (int i = 1 ; i< totalLectureNum + 1 ; i++){
+                for (int i = 1; i < totalLectureNum + 1; i++) {
                     String getDfaultKey = assignment_base_key + i;
-                    Log.d("tag", "getDfaultKey :  " +getDfaultKey );
+                    Log.d("tag", "getDfaultKey :  " + getDfaultKey);
                     assignment_checked[i] = prefs.getBoolean(getDfaultKey, true);
-                    Log.d("tag", "getDfaultBool " +assignment_checked[i] );
+                    Log.d("tag", "getDfaultBool " + assignment_checked[i]);
                 }
 
-                for(int i=1; i<totalLectureNum+1;i++) {
+                for (int i = 1; i < totalLectureNum + 1; i++) {
                     String lectureName = lectureName_array[i];
                     int count_i = i;
 
-                        DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
-                        percentageRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NotNull DataSnapshot snapshot) {
-                                full_assignment = snapshot.getValue(String.class);
-                                Log.e("lecture Name " + count_i, lectureName);
+                    DatabaseReference percentageRef = database.getReference("User").child(userInfo).child(lectureName).child("assignment");
+                    percentageRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NotNull DataSnapshot snapshot) {
+                            full_assignment = snapshot.getValue(String.class);
+                            Log.e("lecture Name " + count_i, lectureName);
 
-                                assignment_array = full_assignment.split("\n");
-                                int assignment_num = Integer.parseInt(assignment_array[0]);
-                                Log.e("assignment_num" + count_i, assignment_num + "");
+                            assignment_array = full_assignment.split("\n");
+                            int assignment_num = Integer.parseInt(assignment_array[0]);
+                            Log.e("assignment_num" + count_i, assignment_num + "");
 
-                                if (assignment_num != 0) {
-                                    String assignment_name = assignment_array[1];
-                                    //Log.e("assignment_name", assignment_name + "");
+                            if (assignment_num != 0) {
+                                String assignment_name = assignment_array[1];
+                                //Log.e("assignment_name", assignment_name + "");
 
-                                    String isDone_assignment = assignment_array[2];
-                                    //Log.e("isDone_assignment", isDone_assignment + "");
+                                String isDone_assignment = assignment_array[2];
+                                //Log.e("isDone_assignment", isDone_assignment + "");
 
-                                    String assignment_deadline = assignment_array[3];
-                                    String deadline_Date = assignment_deadline.substring(0, 10);
-                                    long d_day = Dday(deadline_Date);  //디데이 구하기
+                                String assignment_deadline = assignment_array[3];
+                                String deadline_Date = assignment_deadline.substring(0, 10);
+                                long d_day = Dday(deadline_Date);  //디데이 구하기
 
-                                    if (d_day >= 0 && assignment_checked[count_i])
-                                        listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
+                                if (d_day >= 0 && assignment_checked[count_i])
+                                    listview_adapter.addItem("D-" + d_day, lectureName, assignment_name, assignment_deadline, isDone_assignment, d_day);
 
-                                }
-                                if (count_i == totalLectureNum) {
-                                    listview_adapter.sort_hashMap();
-                                }
-                                listview_adapter.notifyDataSetChanged();
                             }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            if (count_i == totalLectureNum) {
+                                listview_adapter.sort_hashMap();
                             }
-                        });
+                            listview_adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error){}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
         return rootView;

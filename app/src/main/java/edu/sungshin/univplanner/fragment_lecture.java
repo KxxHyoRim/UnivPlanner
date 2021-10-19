@@ -42,6 +42,8 @@ import java.util.function.Predicate;
  */
 public class fragment_lecture extends Fragment  {
 
+    SharedPreferences prefs2;
+
     //데이터베이스 값 가져오기
     private FirebaseDatabase myFirebaseDatabase;
     private DatabaseReference myDatabaseReference;
@@ -106,7 +108,6 @@ public class fragment_lecture extends Fragment  {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        SharedPreferences prefs2;
         prefs2 = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         //로그인한 유저의 정보 가져오기
@@ -127,55 +128,79 @@ public class fragment_lecture extends Fragment  {
                 // 수강하는 과목 개수 가져오기
                 lectureName_array = lecture_fullList.split("\n");
                 totalLectureNum = Integer.parseInt(lectureName_array[0]);
-                Log.e("hyo_total_lecture_num", totalLectureNum + "");
+                Log.e("onDataChange_L", totalLectureNum + "");
 
+                // 초기화 (기존 설정값 로드)
                 lecture_checked = new Boolean[totalLectureNum+1];
-//                for(int i=1; i<totalLectureNum+1;i++){
-//                    lecture_checked[i] = true;
-//                }
-
-                prefs2.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-                        Log.d("tag ::","클릭된 Preference의 key는 "+key);
-                        char idx =  key.charAt(key.length()-1);
-                        int index = idx-'0';
-                        Log.d("tag ::","key 의 마지막 자리 "+index);
-                        boolean checked = sp.getBoolean(key, true);
-                        Log.d("tag ::","bool Check "+ checked + " " );
-
-
-                        if(index <= totalLectureNum ) {             /** Changed!!! */
-
-                            lecture_checked[index] = checked;
-
-                            for (int i = 1; i < totalLectureNum + 1; i++) {
-                                String lecture_key = lecture_base_key + i;
-                                lecture_checked[i] = sp.getBoolean(lecture_key, true);
-                                Log.d("tag_checked", lecture_checked[i] + " at " + i);
-                            }
-                        }
-                    }
-                });
+                for (int i = 1; i < totalLectureNum + 1; i++) {
+                    String lecture_key = lecture_base_key + i;
+                    lecture_checked[i] = prefs2.getBoolean(lecture_key, true);
+                    Log.d("onDataChange_L", lecture_checked[i] + " at " + i);
+                }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
-//        totalLectureNum = Integer.parseInt(lectureName_array[0]);
-//        Log.e("Check totalLectureNum", totalLectureNum + "");
+
+
+        prefs2.registerOnSharedPreferenceChangeListener(new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+
+                int index = getKeyIdx(key);
+                boolean checked = sp.getBoolean(key, true);
+                Log.d("tag ::","bool Check "+ checked + " " );
+
+                if(index <= totalLectureNum ) {         // 아래 for문 때문에 if문 묶어 뒀는데 계속 해서 에러 안나면 이후에 수정
+
+                    lecture_checked[index] = checked;
+
+//                    for (int i = 1; i < totalLectureNum + 1; i++) {
+//                        String lecture_key = lecture_base_key + i;
+//                        lecture_checked[i] = sp.getBoolean(lecture_key, true);
+//                        Log.d("tag_checked", lecture_checked[i] + " at " + i);
+//                    }
+                }
+            }
+
+            private  int getKeyIdx(String key) {
+
+                /* 목적 :
+
+                위 pref2의 Listener가 작동할 때 받아오는 key 값은 setting.xml에 작성되어있는
+                CheckBoxPreference들의 key를 가져온다.
+                각 key들은 lecture_subject8 혹은 assignment_subject15 와 같이
+                '강의정보 / 과제정보 + 숫자' 형태로 naming 되어있다.
+                이때 getKeyIdx라는 함수는 key 뒷부분의 숫자를 return 하는 함수이다.
+                (xml의 몇번째 checkbox가 클릭되었는지 확인)
+
+                원리 :
+                substring() 메소드를 확용하여 subject 이후의 모든 값을 가져오도록 코딩
+                -> 한자리 정수, 두자리 정수 일 떄 모두 문제없이 작동한다.
+
+                * */
+
+                int subj_idx = key.indexOf("subject");
+                System.out.println("subj_idx " + subj_idx);
+                int  idx = Integer.parseInt(key.substring(subj_idx + 7));
+                System.out.println("idx_new " +idx);
+
+                return idx;
+            }
+        });
+
+
 
     }
 
 
-    SharedPreferences.OnSharedPreferenceChangeListener prefListener1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
-
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        }
-    };
+//    SharedPreferences.OnSharedPreferenceChangeListener prefListener1 = new SharedPreferences.OnSharedPreferenceChangeListener() {
+//        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//        }
+//    };
 
     //디데이 구하는 함수
     public static long Dday(String mday){

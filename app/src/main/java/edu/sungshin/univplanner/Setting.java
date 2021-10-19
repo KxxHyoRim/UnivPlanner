@@ -36,6 +36,8 @@ public class Setting extends PreferenceFragment {
 
     SharedPreferences prefs;
 
+    private final int MAX_LECTURE = 15;
+
 
     //데이터베이스 값 가져오기
     private FirebaseDatabase myFirebaseDatabase;
@@ -97,7 +99,7 @@ public class Setting extends PreferenceFragment {
 
                 // 수강하는 과목 개수 가져오기
                 lectureName_array = lecture_fullList.split("\n");
-                totalLectureNum = Integer.parseInt(lectureName_array[0]);
+                totalLectureNum = Integer.parseInt(lectureName_array[0]);           /** Firebase에서 가져오는 과목수 값이 10개이면? _호연 */
                 Log.e("total_lecture_num", totalLectureNum + "");
 
 
@@ -125,8 +127,8 @@ public class Setting extends PreferenceFragment {
 
                 }
 
-                // CheckBoxPreference 삭제하는 코드 (xml에 과목 최대 8개로 만들어놈)
-                for (int i = 8; i > totalLectureNum; i--){
+                // CheckBoxPreference 삭제하는 코드 (xml에 과목 최대 15(MAX_LECTURE)개로 만들어놈)
+                for (int i = MAX_LECTURE; i > totalLectureNum; i--){
                     // 강의
                     lecture_key = lecture_base_key + i;
                     rootPreference = (PreferenceScreen)findPreference("optional_subject_lecture");

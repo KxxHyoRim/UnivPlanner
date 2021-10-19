@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <PreferenceScreen
@@ -43,6 +44,34 @@
             android:defaultValue="true"
             android:key="lecture_subject8"
             android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject9"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject10"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject11"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject12"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject13"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject14"
+            android:title="알고리즘" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="lecture_subject15"
+            android:title="알고리즘" />
 
     </PreferenceScreen>
 
@@ -84,6 +113,34 @@
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="assignment_subject8"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject9"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject10"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject11"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject12"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject13"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject14"
+                android:title="알고리즘" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="assignment_subject15"
                 android:title="알고리즘" />
 
         </PreferenceScreen>
