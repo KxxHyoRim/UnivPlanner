@@ -152,8 +152,8 @@
          -->
 
         <PreferenceScreen
-            android:title="앱버전"
-            android:summary="v.2.3.0">
+            android:title="App Version"
+            android:summary="v.2.4.0">
         </PreferenceScreen>
 
 
